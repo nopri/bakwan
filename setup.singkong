@@ -1,0 +1,62 @@
+#
+    setup.singkong
+    Account setup
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+
+load_module("ui_calendar")
+
+var setup_form = fn() {
+    reset()
+    title(_("title_setup"))
+    closing(_("confirm_quit"), _("title_confirm"))
+
+    var n = part(@)
+
+    var g = component("grid", "")
+
+    var bs = c_btn_(_("cmd_save"), 0, __("cmd_save"))
+    var bq = c_btn_(_("cmd_quit"), 3, __("cmd_quit"))
+
+    var tc = c_text(_("label_company"))
+
+    var gf = component("grid", "")
+    config(gf, "border", _("label_fiscal_year"))
+    var ts = component("label", upper(_("_start"), true))
+    var ds = create_date_picker(n[0], 1)
+    var te = component("label", upper(_("_end"), true))
+    var de = create_date_picker(n[0], 12)
+    grid_add(gf, ts, 0, 1, 1, 1, 0.1, 1, 0, 1)
+    grid_add(gf, ds, 1, 1, 1, 1, 0.9, 1, 1, 1)
+    grid_add(gf, te, 2, 1, 1, 1, 0.1, 1, 0, 1)
+    grid_add(gf, de, 3, 1, 1, 1, 0.9, 1, 1, 1)
+
+    var gp = component("grid", "")
+
+    grid_add(g, tc[0], 0, 0, 4, 1, 1, 1, 1, 1)
+    grid_add(g, gf, 0, 1, 4, 1, 1, 1, 1, 1)
+    grid_add(g, gp, 0, 2, 4, 1, 1, 20, 3, 0)
+    grid_add(g, bq, 1, 3, 1, 1, 1, 1, 0, 2)
+    grid_add(g, bs, 2, 3, 1, 1, 1, 1, 0, 1)
+    add(g)
+
+    show()
+
+    event(bs, fn() {
+        var _tc = trim(get(tc[1], "contents"))
+        if (empty(_tc)) {
+            s_text_label(tc, _("error_company_name"), 1)
+        } else {
+            config(tc[1], "contents", _tc)
+            s_text_label(tc, " ", 0)
+        }
+    })
+
+    event(bq, fn() {
+        frame_close()
+    })
+}

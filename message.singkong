@@ -1,0 +1,42 @@
+#
+    message.singkong
+    
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+var msg = {
+    "cmd_save": "Save",
+    "cmd_quit": "Quit",
+    "title_confirm": "Please confirm",
+    "title_setup": "Account setup",
+    "confirm_quit": "Are you sure you want to quit this application?",
+    "label_company": "Company name",
+    "label_fiscal_year": "Fiscal year",
+    "error_company_name": "Please fill in the company name",
+    "_start": "start",
+    "_end": "end",
+}
+
+var mnemonic = {
+    "cmd_save": 0,
+    "cmd_quit": 1,
+}
+
+var _ = fn(k) {
+    var m = msg[k]
+    if (m == null) {
+        return k
+    }
+    return m
+}
+
+var __ = fn(k) {
+    var m = mnemonic[k]
+    if (m == null) {
+        return 0
+    }
+    return m
+}

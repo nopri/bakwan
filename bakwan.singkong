@@ -1,0 +1,24 @@
+#
+    bakwan.singkong
+    
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+load_file_or_resource("system.singkong")
+load_file_or_resource("ui.singkong")
+load_file_or_resource("setup.singkong")
+load_file_or_resource("message.singkong")
+
+var auth = {
+    "user": null,
+    "group": null,
+    "permission": null
+}
+
+if (is_new()) {
+    setup_form()    
+}
+

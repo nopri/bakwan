@@ -1,0 +1,11 @@
+#
+    main.singkong
+    main (runnable jar file)
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+load_file_or_resource("bakwan.singkong")
+

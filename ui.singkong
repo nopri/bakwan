@@ -1,0 +1,75 @@
+#
+    ui.singkong
+    User interface utilities
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+require(8.2)
+
+var c_btn_ = fn(a, t, m) {
+    var opt = {
+        0: [-16750849, -1],
+        1: [-16724992, -1],
+        2: [-52429, -1],
+        3: [-26368, -16777216]
+    }
+    var b = component("button", a)
+    var c = opt[t]
+    if (c != null) {
+        config(b, "background", c[0])
+        config(b, "foreground", c[1])
+    }
+    config(b, "active", m)
+    return b
+}
+
+var c_btn = fn(a) {
+    return c_btn_(a, 0, 0)
+}
+
+var c_text = fn(a) {
+    var g = component("grid", "text")
+    var t = component("text", "")
+    config(t, "border", a)
+    var x = component("label", "")
+    grid_add(g, t, 0, 0, 1, 1, 1, 1, 3, 1)
+    grid_add(g, x, 0, 1, 1, 1, 0, 0, 0, 1)
+    return [g, t, x]
+}
+
+var s_text_label = fn(a, s, t) {
+    if (!is(a, "ARRAY")) {
+        return false
+    }
+    if (len(a) != 3) {
+        return false
+    }
+    var g = a[0]
+    if (!is(g, "COMPONENT")) {
+        return null
+    }
+    var i = component_info(g)
+    if (i[6] != "text") {
+        return null
+    }
+    var x = a[2]
+    var y = component_type(x)
+    if (y != "label") {
+        return null
+    }
+    var opt = {
+        0: [-13421569, null, -1],
+        1: [-52429, null, -52]
+    }
+    var c = opt[t]
+    if (c != null) {
+        config(x, "text", string(s))
+        config(x, "foreground", c[0])
+        config(a[1], "background", c[2])
+    }
+    return true    
+}
+

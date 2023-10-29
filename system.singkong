@@ -1,0 +1,21 @@
+#
+    system.singkong
+    System
+    part of Bakwan: simple accounting software
+    
+    (c) Noprianto (nop@noprianto.com), 2023
+    (c) Bakwan developers, 2023
+;
+
+load_module("db_util")
+
+require(8.2)
+
+var get_db = fn() {
+    return null
+}
+
+var is_new = fn() {
+    return true
+}
+
