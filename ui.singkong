@@ -3,9 +3,9 @@
     User interface utilities
     part of Bakwan: simple accounting software
     
-    (c) Noprianto (nop@noprianto.com), 2023
+    Authors:
+    Noprianto (nop@noprianto.com)
     Budiman
-    (c) Bakwan developers, 2023
 ;
 
 var c_btn_ = fn(a, t, m) {
