@@ -4,6 +4,7 @@
     part of Bakwan: simple accounting software
     
     (c) Noprianto (nop@noprianto.com), 2023
+    Budiman
     (c) Bakwan developers, 2023
 ;
 
@@ -49,16 +50,16 @@ var s_text_label = fn(a, s, t) {
     }
     var g = a[0]
     if (!is(g, "COMPONENT")) {
-        return null
+        return false
     }
     var i = component_info(g)
     if (i[6] != "text") {
-        return null
+        return false
     }
     var x = a[2]
     var y = component_type(x)
     if (y != "label") {
-        return null
+        return false
     }
     var opt = {
         0: [-13421569, null, -1],
