@@ -7,33 +7,55 @@
     (c) Bakwan developers, 2023
 ;
 
-
 load_module("ui_calendar")
+
+var _default_fiscal_start = fn() {
+    var n = part(@)
+    return [
+        n[0],
+        1,
+        format_date(date([n[0], 1, 1]))
+    ]
+}
+
+var _default_fiscal_end = fn() {
+    var n = part(@)
+    var z = len(days_of_month(n[0], 12))
+    return [
+        n[0],
+        12,
+        format_date(date([n[0], 12, z]))
+    ]
+}
 
 var setup_form = fn() {
     reset()
     title(_("title_setup"))
     closing(_("confirm_quit"), _("title_confirm"))
 
-    var n = part(@)
-
     var g = component("grid", "")
 
     var bs = c_btn_(_("cmd_save"), 0, __("cmd_save"))
-    var bq = c_btn_(_("cmd_quit"), 3, __("cmd_quit"))
+    var bq = c_btn_(_("cmd_quit"), 5, __("cmd_quit"))
 
     var tc = c_text(_("label_company"))
 
     var gf = component("grid", "")
     config(gf, "border", _("label_fiscal_year"))
     var ts = component("label", upper(_("_start"), true))
-    var ds = create_date_picker(n[0], 1)
     var te = component("label", upper(_("_end"), true))
-    var de = create_date_picker(n[0], 12)
+
+    var dfs = _default_fiscal_start()
+    var ds = create_date_picker(dfs[0], dfs[1])
+    config(ds[1], "contents", dfs[2])
+    var dfe = _default_fiscal_end()
+    var de = create_date_picker(dfe[0], dfe[1])
+    config(de[1], "contents", dfe[2])
+
     grid_add(gf, ts, 0, 1, 1, 1, 0.1, 1, 0, 1)
-    grid_add(gf, ds, 1, 1, 1, 1, 0.9, 1, 1, 1)
+    grid_add(gf, ds[0], 1, 1, 1, 1, 0.9, 1, 1, 1)
     grid_add(gf, te, 2, 1, 1, 1, 0.1, 1, 0, 1)
-    grid_add(gf, de, 3, 1, 1, 1, 0.9, 1, 1, 1)
+    grid_add(gf, de[0], 3, 1, 1, 1, 0.9, 1, 1, 1)
 
     var gp = component("grid", "")
 

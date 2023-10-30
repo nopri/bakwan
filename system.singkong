@@ -9,8 +9,6 @@
 
 load_module("db_util")
 
-require(8.2)
-
 var get_db = fn() {
     return null
 }
