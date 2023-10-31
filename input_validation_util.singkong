@@ -1,0 +1,48 @@
+#
+    input_validation_util.singkong
+    Validation utility for string input
+    part of Bakwan: simple accounting software
+
+    Authors:
+    Jodie Tyaswara W
+;
+
+# Filter all malicious special character from a string ; 
+var special_character_filter = fn(forbidden_inp, filter_array) {
+    var x = 0
+    var arr_length = len(filter_array)
+    var result_inp = repeat {
+        if (in(forbidden_inp, filter_array[x])) {
+            var forbidden_inp = replace(forbidden_inp, filter_array[x], "R#R")
+        }
+
+        var x = x + 1
+        if (x > arr_length) {
+            return forbidden_inp
+        }
+    }
+
+    return result_inp
+}
+
+var is_only_letter_number = fn(form_inp) {
+    var regex = "^[a-zA-Z0-9]+$"
+    if (!matches(form_inp, regex)) {
+        return false
+    }
+    return true
+}
+
+var filter_letter_number = fn(form_inp) {
+    var regex = "^[a-zA-Z0-9]+$"
+    if (!matches(form_inp, regex)) {
+        var filter_array = ["+", "-", "*", "/", "%", "=", "==", "!=", "<", ">", "<=", ">=","&&", 
+        "||", "!", "&", "|", "^", "~", "<<", ">>", "?", "::", "->",".", "[]", "()", "{}", "[]", 
+        ";", ":", ",", "#", "//", "/* */", "//", "/* */"]
+
+        var result_inp = special_character_filter(form_inp, filter_array)
+        return result_inp
+    }
+
+    return form_inp
+}
