@@ -1,0 +1,24 @@
+#
+    account.singkong
+    Account
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+;
+
+var ac_type_asset = "Asset"
+var ac_type_liability = "Liability"
+var ac_type_equity = "Equity"
+var ac_type_income = "Income"
+var ac_type_expense = "Expense"
+
+var accounts_template = [
+    [ac_type_asset, "110", "Cash"],
+    [ac_type_asset, "120", "Accounts Receivable"],
+    [ac_type_asset, "130", "Inventory"],
+    [ac_type_liability, "210", "Accounts Payable"],
+    [ac_type_equity, "310", "Owners' Equity"],
+    [ac_type_income, "410", "Revenue"],
+    [ac_type_expense, "510", "Utilities"]
+]
