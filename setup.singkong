@@ -5,6 +5,7 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
+    Budiman (budyzhang778@gmail.com)
 ;
 
 load_module("ui_calendar")
@@ -28,10 +29,16 @@ var _default_fiscal_end = fn() {
     ]
 }
 
+
 var _load_coa = fn(ctx, tbl) {
     if (is_new()) {
         config(tbl, "contents", accounts_template)
     }
+}
+
+var _refresh_coa = fn(tbl) {
+    # Pull from DB
+    config(tbl, "contents", coa_data_fetch())
 }
 
 var setup_form = fn(ctx) {
@@ -76,7 +83,8 @@ var setup_form = fn(ctx) {
     grid_add(g_tbl, b_coa_d, 0, 2, 1, 1, 1, 0, 1, 1)
     grid_add(g_tbl, g_btn, 0, 3, 1, 1, 1, 1, 1, 1)
     grid_add(gp, tbl_coa, 0, 0, 1, 1, 1, 1, 3, 1)
-    grid_add(gp, g_tbl,   1, 0, 1, 1, 0, 1, 2, 1)
+
+    grid_add(gp, g_tbl,   1, 0, 1, 1, 0, 1, 2, 1)
 
     grid_add(g, tc[0], 0, 0, 4, 1, 1, 0, 1, 1)
     grid_add(g, gf, 0, 1, 4, 1, 1, 0, 1, 1)
@@ -85,18 +93,152 @@ var setup_form = fn(ctx) {
     grid_add(g, bs, 2, 3, 1, 1, 1, 0, 0, 1)
     add(g)
 
-    _load_coa(ctx, tbl_coa)
+    #
+        _load_coa(ctx, tbl_coa)
+    ;
+    _refresh_coa(tbl_coa)
 
     show()
 
+    # Ini untuk add;
     event(b_coa_n, fn() {
-        message("new")
+        var g = component("grid", "")
+
+        var p = component("panel", "")
+
+        var acc_type = component("text", "")
+        config(acc_type, "border", "Acc_Type")
+
+        var code = component("text", "")
+        config(code, "border", "Code")
+
+        var desc = component("text", "")
+        config(desc, "border", "Desc")
+
+        grid_add(g, acc_type, 0, 0, 2, 1, 1, 1, 1, 0)
+        grid_add(g, code, 0, 1, 2, 1, 1, 1, 1, 0)
+        grid_add(g, desc, 0, 2, 2, 1, 1, 1, 1, 0)
+        panel_add(p, g, 0, 0, 300, 200)
+        
+        var r = panel_dialog(p, "Tambah COA", 350, 300)
+        
+        if(r == "OK"){
+            var acc_type_content = trim(get(acc_type, "contents"))
+            var code_content = trim(get(code, "contents"))
+            var desc_content = trim(get(desc, "contents"))
+
+            if((!empty(acc_type_content)) & (!empty(code_content)) & (!empty(desc_content))){
+                var code_content = number(code_content)
+
+                if(!is(code_content, "NUMBER") | code_content == 0){
+                    message("Please only use numbers for code")
+                    return false
+                }
+                var new_coa = {
+                    "type": acc_type_content,
+                    "code": code_content,
+                    "desc": desc_content
+                }
+                #Tarok sini db_conn nya;
+                var flag = new_button_controller(new_coa)
+                if (flag) {
+                    _refresh_coa(tbl_coa)
+                } else {
+                    message("fail to insert")
+                }
+            } else {
+                message("Semua field harus diisi")
+            } 
+        }
     })
+
     event(b_coa_e, fn() {
-        message("edit")
+        var active = get(tbl_coa, "active");
+        if(active == -1){
+            message("Select a a row to edit")
+            return false
+        }
+        var ori_type = table_get_value(tbl_coa, active, 0)
+        var ori_code = table_get_value(tbl_coa, active, 1)
+        var ori_desc = table_get_value(tbl_coa, active, 2)
+
+        var g = component("grid", "")
+
+        var p = component("panel", "")
+
+        var acc_type = component("text", "")
+        config(acc_type, "border", "Acc_Type")
+        config(acc_type, "contents", ori_type)
+
+        var code = component("text", "")
+        config(code, "border", "Code")
+        config(code, "contents", ori_code)
+
+        var desc = component("text", "")
+        config(desc, "border", "Desc")
+        config(desc, "contents", ori_desc)
+
+        grid_add(g, acc_type, 0, 0, 2, 1, 1, 1, 1, 0)
+        grid_add(g, code, 0, 1, 2, 1, 1, 1, 1, 0)
+        grid_add(g, desc, 0, 2, 2, 1, 1, 1, 1, 0)
+        panel_add(p, g, 0, 0, 300, 200)
+        
+        var r = panel_dialog(p, "Edit COA", 350, 300)
+        
+        if(r == "OK"){
+            var acc_type_content = trim(get(acc_type, "contents"))
+            var code_content = trim(get(code, "contents"))
+            var desc_content = trim(get(desc, "contents"))
+
+            if((!empty(acc_type_content)) & (!empty(code_content)) & (!empty(desc_content))){
+                var code_content = number(code_content)
+
+                if(!is(code_content, "NUMBER") | code_content == 0){
+                    message("Please only use numbers for code")
+                    return false
+                }
+                var edit_coa = {
+                    "ori_code": ori_code,
+                    "type": acc_type_content,
+                    "code": code_content,
+                    "desc": desc_content
+                }
+                #Tarok sini db_conn nya;
+                if (flag) {
+                    _refresh_coa(tbl_coa)
+                } else {
+                    message("fail to edit")
+                }
+            } else {
+                message("Semua field harus diisi")
+            } 
+        }
     })
+
     event(b_coa_d, fn() {
-        message("delete")
+        var active = get(tbl_coa, "active");
+        if(active == -1){
+            message("Select a a row to edit")
+            return false
+        }
+        var p = component("panel", "")
+        var s = component("label", "CONFIRM DELETE")
+        panel_add(p, s, 50, 10, 100, 20)
+        var pop_res = panel_dialog(p, "DELETE", 250, 150)
+        if(pop_res == "OK"){
+            var ori_code = table_get_value(tbl_coa, active, 1)
+            var delete_coa = {
+                "ori_code": ori_code
+            }
+            # Masukin db-con sini;
+            var flag = delete_button_controller(delete_coa)
+            if (flag) {
+                _refresh_coa(tbl_coa)
+            } else {
+                message("fail to delete")
+            }
+        }
+
     })
 
     event(bs, fn() {
