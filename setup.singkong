@@ -100,7 +100,7 @@ var setup_form = fn(ctx) {
 
     show()
 
-    # Ini untuk add;
+    # Add button event;
     event(b_coa_n, fn() {
         var g = component("grid", "")
 
@@ -151,7 +151,7 @@ var setup_form = fn(ctx) {
             } 
         }
     })
-
+    # Edit button event;
     event(b_coa_e, fn() {
         var active = get(tbl_coa, "active");
         if(active == -1){
@@ -214,7 +214,7 @@ var setup_form = fn(ctx) {
             } 
         }
     })
-
+    # Delete button event;
     event(b_coa_d, fn() {
         var active = get(tbl_coa, "active");
         if(active == -1){
