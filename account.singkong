@@ -13,6 +13,15 @@ var ac_type_equity = "Equity"
 var ac_type_income = "Income"
 var ac_type_expense = "Expense"
 
+var ac_types = [
+    ac_type_asset,
+    ac_type_liability,
+    ac_type_equity,
+    ac_type_income,
+    ac_type_expense
+]
+var ac_types_ = join(",", ac_types)
+
 var accounts_template = [
     [ac_type_asset, "110", "Cash"],
     [ac_type_asset, "120", "Accounts Receivable"],

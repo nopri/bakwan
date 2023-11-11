@@ -34,6 +34,20 @@ var _load_coa = fn(ctx, tbl) {
     }
 }
 
+var _account_dialog = fn(ctx, t) {
+    var cmb_type = component("combobox", ac_types_)
+    config(cmb_type, "border", _u("_account_type"))
+    var msk_code = component("mask", "###")
+    config(msk_code, "border", _u("_code"))
+    var txt_desc = component("text", "")
+    config(txt_desc, "border", _u("_description"))
+    var g = component("grid", "")
+    grid_add(g, cmb_type, 0, 0, 1, 1, 1, 0, 1, 1)
+    grid_add(g, msk_code, 1, 0, 1, 1, 0.5, 0, 1, 1)
+    grid_add(g, txt_desc, 0, 1, 2, 1, 1, 0, 1, 1)
+    return panel_dialog(g, t, ctx["dialog_width"], ctx["dialog_height"])
+}
+
 var setup_form = fn(ctx) {
     reset()
     title(_("title_setup"))
@@ -57,6 +71,9 @@ var setup_form = fn(ctx) {
     var dfe = _default_fiscal_end()
     var de = create_date_picker(dfe[0], dfe[1])
     config(de[1], "contents", dfe[2])
+
+    d_btn_s(ds[2])
+    d_btn_s(de[2])
 
     grid_add(gf, ts, 0, 1, 1, 1, 0.1, 1, 0, 1)
     grid_add(gf, ds[0], 1, 1, 1, 1, 0.9, 1, 1, 1)
@@ -90,7 +107,7 @@ var setup_form = fn(ctx) {
     show()
 
     event(b_coa_n, fn() {
-        message("new")
+        var r = _account_dialog(ctx, _("title_account_new"))
     })
     event(b_coa_e, fn() {
         message("edit")

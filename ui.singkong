@@ -8,17 +8,18 @@
     Budiman
 ;
 
+var button_opt = {
+    0: [-16750849, -1],
+    1: [-16724992, -1],
+    2: [-52429, -1],
+    3: [-26368, -16777216],
+    4: [-16777216, -1],
+    5: [-1, -16777216]
+}
+
 var c_btn_ = fn(a, t, m) {
-    var opt = {
-        0: [-16750849, -1],
-        1: [-16724992, -1],
-        2: [-52429, -1],
-        3: [-26368, -16777216],
-        4: [-16777216, -1],
-        5: [-1, -16777216]
-    }
     var b = component("button", a)
-    var c = opt[t]
+    var c = button_opt[t]
     if (c != null) {
         config(b, "background", c[0])
         config(b, "foreground", c[1])
@@ -29,6 +30,19 @@ var c_btn_ = fn(a, t, m) {
 
 var c_btn = fn(a) {
     return c_btn_(a, 0, 0)
+}
+
+var d_btn = fn(b, t) {
+    var c = button_opt[t]
+    if (c != null) {
+        config(b, "background", c[0])
+        config(b, "foreground", c[1])
+    }    
+}
+
+var d_btn_s = fn(b) {
+    config(b, "margin", [1, 2, 1, 2])
+    return d_btn(b, 5)
 }
 
 var c_text = fn(a) {

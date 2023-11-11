@@ -7,7 +7,7 @@
     Noprianto (nop@noprianto.com)
 ;
 
-require(8.3)
+require(8.4)
 
 load_file_or_resource("account.singkong")
 load_file_or_resource("system.singkong")
@@ -18,7 +18,9 @@ load_file_or_resource("message.singkong")
 var ctx = {
     "user": null,
     "group": null,
-    "permission": null
+    "permission": null,
+    "dialog_width": 400,
+    "dialog_height": 200,
 }
 
 if (is_new()) {
