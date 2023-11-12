@@ -9,7 +9,7 @@
 
 load_module("ui_calendar")
 
-var _default_fiscal_start = fn() {
+var default_fiscal_start = fn() {
     var n = part(@)
     return [
         n[0],
@@ -18,7 +18,7 @@ var _default_fiscal_start = fn() {
     ]
 }
 
-var _default_fiscal_end = fn() {
+var default_fiscal_end = fn() {
     var n = part(@)
     var z = len(days_of_month(n[0], 12))
     return [
@@ -28,23 +28,45 @@ var _default_fiscal_end = fn() {
     ]
 }
 
-var _load_coa = fn(ctx, tbl) {
+var load_coa = fn(ctx, tbl) {
     if (is_new()) {
         config(tbl, "contents", accounts_template)
     }
 }
 
-var _account_dialog = fn(ctx, t) {
+var set_account_code = fn(cmb, msk) {
+    var c = get(cmb, "text")
+    var m = get(msk, "contents")
+    if (endswith(m, "_")) {
+        var code = ac_types_code[c]
+        config(msk, "contents", code)
+    }
+}
+
+var account_dialog = fn(ctx, t) {
     var cmb_type = component("combobox", ac_types_)
-    config(cmb_type, "border", _u("_account_type"))
-    var msk_code = component("mask", "###")
+    d_cmb_border(cmb_type, _u("_account_type"))
+    var msk_code = component("mask", ac_mask)
     config(msk_code, "border", _u("_code"))
     var txt_desc = component("text", "")
     config(txt_desc, "border", _u("_description"))
+    var btn_rst = c_btn_(_("cmd_reset"), 2, _m("cmd_reset"))
     var g = component("grid", "")
+    d_grid(g)
     grid_add(g, cmb_type, 0, 0, 1, 1, 1, 0, 1, 1)
     grid_add(g, msk_code, 1, 0, 1, 1, 0.5, 0, 1, 1)
-    grid_add(g, txt_desc, 0, 1, 2, 1, 1, 0, 1, 1)
+    grid_add(g, btn_rst, 2, 0, 1, 1, 0, 0, 0, 1)
+    grid_add(g, txt_desc, 0, 1, 3, 1, 1, 0, 1, 1)
+
+    set_account_code(cmb_type, msk_code)
+    event(cmb_type, fn() {
+        set_account_code(cmb_type, msk_code)
+    })    
+
+    event(btn_rst, fn() {
+        config(msk_code, "contents", "")
+    })
+
     return panel_dialog(g, t, ctx["dialog_width"], ctx["dialog_height"])
 }
 
@@ -55,8 +77,8 @@ var setup_form = fn(ctx) {
 
     var g = component("grid", "")
 
-    var bs = c_btn_(_("cmd_save"), 0, __("cmd_save"))
-    var bq = c_btn_(_("cmd_quit"), 5, __("cmd_quit"))
+    var bs = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
+    var bq = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
 
     var tc = c_text(_("label_company"))
 
@@ -65,10 +87,10 @@ var setup_form = fn(ctx) {
     var ts = component("label", upper(_("_start"), true))
     var te = component("label", upper(_("_end"), true))
 
-    var dfs = _default_fiscal_start()
+    var dfs = default_fiscal_start()
     var ds = create_date_picker(dfs[0], dfs[1])
     config(ds[1], "contents", dfs[2])
-    var dfe = _default_fiscal_end()
+    var dfe = default_fiscal_end()
     var de = create_date_picker(dfe[0], dfe[1])
     config(de[1], "contents", dfe[2])
 
@@ -84,9 +106,9 @@ var setup_form = fn(ctx) {
     table_center(tbl_coa, 1)
     var gp = component("grid", "")
     var g_tbl = component("grid", "")
-    var b_coa_n = c_btn_(_("cmd_new"), 1, __("cmd_new"))
-    var b_coa_e = c_btn_(_("cmd_edit"), 3, __("cmd_edit"))
-    var b_coa_d = c_btn_(_("cmd_delete"), 2, __("cmd_delete"))
+    var b_coa_n = c_btn_(_("cmd_new"), 1, _m("cmd_new"))
+    var b_coa_e = c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
+    var b_coa_d = c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
     var g_btn = component("grid", "")
     grid_add(g_tbl, b_coa_n, 0, 0, 1, 1, 1, 0, 1, 1)
     grid_add(g_tbl, b_coa_e, 0, 1, 1, 1, 1, 0, 1, 1)
@@ -102,12 +124,12 @@ var setup_form = fn(ctx) {
     grid_add(g, bs, 2, 3, 1, 1, 1, 0, 0, 1)
     add(g)
 
-    _load_coa(ctx, tbl_coa)
+    load_coa(ctx, tbl_coa)
 
     show()
 
     event(b_coa_n, fn() {
-        var r = _account_dialog(ctx, _("title_account_new"))
+        var r = account_dialog(ctx, _("title_account_new"))
     })
     event(b_coa_e, fn() {
         message("edit")

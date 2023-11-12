@@ -32,6 +32,7 @@ var c_btn = fn(a) {
     return c_btn_(a, 0, 0)
 }
 
+
 var d_btn = fn(b, t) {
     var c = button_opt[t]
     if (c != null) {
@@ -43,6 +44,15 @@ var d_btn = fn(b, t) {
 var d_btn_s = fn(b) {
     config(b, "margin", [1, 2, 1, 2])
     return d_btn(b, 5)
+}
+
+var d_cmb_border = fn(c, b) {
+    config(c, "border", b)
+    config(c, "background", "white")
+}
+
+var d_grid = fn(g) {
+    config(g, "background", "white")
 }
 
 var c_text = fn(a) {

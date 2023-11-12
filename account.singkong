@@ -22,6 +22,17 @@ var ac_types = [
 ]
 var ac_types_ = join(",", ac_types)
 
+var ac_mask = "###"
+var ac_char = "___"
+
+var ac_types_code = {
+    ac_type_asset: 1,
+    ac_type_liability: 2,
+    ac_type_equity: 3,
+    ac_type_income: 4,
+    ac_type_expense: 5,
+}
+
 var accounts_template = [
     [ac_type_asset, "110", "Cash"],
     [ac_type_asset, "120", "Accounts Receivable"],

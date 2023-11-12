@@ -13,6 +13,7 @@ var msg = {
     "cmd_new": "New",
     "cmd_edit": "Edit",
     "cmd_delete": "Delete",
+    "cmd_reset": "Reset",
     "title_confirm": "Please confirm",
     "title_setup": "Account setup",
     "title_account_new": "Create new account",
@@ -37,6 +38,7 @@ var mnemonic = {
     "cmd_new": 0,
     "cmd_edit": 0,
     "cmd_delete": 0,
+    "cmd_reset": 0,
 }
 
 var _ = fn(k) {
@@ -51,7 +53,7 @@ var _u = fn(k) {
     return upper(_(k), true)
 }
 
-var __ = fn(k) {
+var _m = fn(k) {
     var m = mnemonic[k]
     if (m == null) {
         return 0
