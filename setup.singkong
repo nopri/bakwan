@@ -48,6 +48,7 @@ var account_dialog = fn(ctx, t) {
     d_cmb_border(cmb_type, _u("_account_type"))
     var msk_code = component("mask", ac_mask)
     config(msk_code, "border", _u("_code"))
+    config(msk_code, "align", 2)
     var txt_desc = component("text", "")
     config(txt_desc, "border", _u("_description"))
     var btn_rst = c_btn_(_("cmd_reset"), 2, _m("cmd_reset"))

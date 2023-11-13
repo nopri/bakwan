@@ -7,7 +7,7 @@
     Noprianto (nop@noprianto.com)
 ;
 
-require(8.4)
+require(8.5)
 
 load_file_or_resource("account.singkong")
 load_file_or_resource("system.singkong")
