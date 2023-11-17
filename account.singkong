@@ -42,3 +42,36 @@ var accounts_template = [
     [ac_type_income, "410", "Revenue"],
     [ac_type_expense, "510", "Utilities"]
 ]
+
+var is_valid_account_type = fn(t) {
+    return in(ac_types, t)
+}
+
+var is_valid_account_code = fn(c) {
+    var c = replace(trim(c), "_", "")
+    return ((len(c) == len(ac_mask)) & isdigit(c) )
+}
+
+var is_valid_account_desc = fn(d) {
+    var d = trim(d)
+    return !empty(d)
+}
+
+var is_valid_account = fn(a) {
+    if (is(a, "ARRAY")) {
+        if (len(a) == 3) {
+            return is_valid_account_type(a[0]) &
+                is_valid_account_code(a[1]) &
+                is_valid_account_desc(a[2])
+        }
+    }
+    return false
+}
+
+var account_details = fn(a) {
+    var ret = [""]
+    each(keys(a), fn(e, i) {
+        ret + (upper(_(e), true) + ": " + a[e])
+    })
+    return join(lf(), ret)
+}
