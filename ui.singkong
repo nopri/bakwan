@@ -98,3 +98,13 @@ var s_text_label = fn(a, s, t) {
     return true    
 }
 
+var c_disable_text = fn(c) {
+    var lbl = component("label", "")
+    config(c, "enabled", false)
+    config(c, "background", get(lbl, "background"))
+}
+
+var c_enable_text = fn(c) {
+    config(c, "enabled", true)
+    config(c, "background", "white")
+}

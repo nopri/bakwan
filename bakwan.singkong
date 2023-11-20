@@ -14,6 +14,7 @@ load_file_or_resource("system.singkong")
 load_file_or_resource("ui.singkong")
 load_file_or_resource("setup.singkong")
 load_file_or_resource("message.singkong")
+load_file_or_resource("config.singkong")
 
 var ctx = {
     "user": null,
@@ -21,9 +22,18 @@ var ctx = {
     "permission": null,
     "dialog_width": 400,
     "dialog_height": 200,
+    "dialog_height_2": 240,
 }
 
+var conf = read_config()
+if (empty(conf)) {    
+    config_form(ctx)
+}
+
+#
 if (is_new()) {
     setup_form(ctx)    
 }
+;
+
 
