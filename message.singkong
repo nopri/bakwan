@@ -14,6 +14,7 @@ var msg = {
     "cmd_edit": "Edit",
     "cmd_delete": "Delete",
     "cmd_reset": "Reset",
+    "cmd_test_connect": "Test Connection",
     "title_info": "Information",
     "title_error": "Error",
     "title_confirm": "Please confirm",
@@ -27,7 +28,7 @@ var msg = {
     "label_company": "Company name",
     "label_fiscal_year": "Fiscal year",
     "label_db_type": "Database type",
-    "label_db_host": "Host",
+    "label_db_host": "Host[:port]",
     "label_db_user": "User",
     "label_db_password": "Password",
     "label_db_name": "Name",
@@ -35,7 +36,9 @@ var msg = {
     "error_account_edit": "Please select an account to edit",
     "error_account_delete": "Please select an account to delete",
     "error_account_invalid": "Please enter valid account details",
+    "error_db_connect": "Cannot connect to database",
     "table_coa": "Type,Code,Description",
+    "msg_db_connected": "Successfully connected to database",
     "_start": "start",
     "_end": "end",
     "_code": "code",
@@ -51,6 +54,7 @@ var mnemonic = {
     "cmd_edit": 0,
     "cmd_delete": 0,
     "cmd_reset": 0,
+    "cmd_test_connect": 0,
 }
 
 var _ = fn(k) {

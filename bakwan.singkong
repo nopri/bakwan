@@ -16,7 +16,10 @@ load_file_or_resource("setup.singkong")
 load_file_or_resource("message.singkong")
 load_file_or_resource("config.singkong")
 
+var app_name = "Bakwan"
+
 var ctx = {
+    "name": app_name,
     "user": null,
     "group": null,
     "permission": null,
@@ -26,14 +29,13 @@ var ctx = {
 }
 
 var conf = read_config()
-if (empty(conf)) {    
+if (empty(conf)) {
     config_form(ctx)
+} else {
+    if (is_new()) {
+        setup_form(ctx)    
+    }
 }
 
-#
-if (is_new()) {
-    setup_form(ctx)    
-}
-;
 
 
