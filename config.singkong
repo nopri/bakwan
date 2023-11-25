@@ -5,7 +5,9 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
-;
+;
+
+
 
 load_module("db_util")
 
@@ -73,7 +75,8 @@ var config_form = fn(ctx) {
     reset()
     title(_("title_db_config"))
     closing(_("confirm_quit"), _("title_confirm"))
-    size(ctx["dialog_width"], ctx["dialog_height_2"])
+
+    size(ctx["dialog_width"], ctx["dialog_height_2"])
     resizable(false)
 
     var g = component("grid", "")
@@ -81,7 +84,8 @@ var config_form = fn(ctx) {
     var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
     var btn_connect = c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
     var btn_quit = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
-    var g_btn = component("grid", "")
+
+    var g_btn = component("grid", "")
     grid_add(g_btn, btn_connect, 0, 0, 1, 1, 1, 0, 0, 1)
     grid_add(g_btn, btn_quit, 1, 0, 1, 1, 1, 0, 0, 2)
     grid_add(g_btn, btn_save, 2, 0, 1, 1, 0, 0, 0, 2)
@@ -130,6 +134,36 @@ var config_form = fn(ctx) {
     })
 
     event(btn_save, fn() {
+        # Test DB connection, return false if invalid connection;
+        var db = test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        if (db == null) {
+            message(_("error_db_connect"), _("title_error"))
+            return false
+        } 
+
+        var db_type_input = get(cmb_type, "text")
+        var host_input = get(txt_host, "contents")
+        var user_input = get(txt_user, "contents")
+        var password_input = get(pas_db, "contents")
+        var name_input = get(txt_name, "contents")
+        
+        var config_hash = {
+            "db_type": db_type_input,
+            "db_host": host_input,
+            "db_user": user_input,
+            "db_password": password_input,
+            "db_name": name_input
+        }
+        # Content confirmation
+            message(config_hash)
+        ;
+        if(properties_write(conf_path, config_hash)){
+            message(_("success_write_file"), _("title_info"))
+            setup_form(ctx)
+        }else{
+            message(_("error_write_file"), _("title_error"))
+            return false
+        }
     })
 
     event(btn_quit, fn() {
