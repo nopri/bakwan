@@ -7,7 +7,7 @@
     Noprianto (nop@noprianto.com)
 ;
 
-require(8.5)
+require(8.6)
 
 load_file_or_resource("account.singkong")
 load_file_or_resource("system.singkong")
@@ -18,24 +18,35 @@ load_file_or_resource("config.singkong")
 
 var app_name = "Bakwan"
 
+reset()
+title(app_name)
+closing(_("confirm_quit"), _("title_confirm"))
+show()
+
+var frame_info = frame()
 var ctx = {
     "name": app_name,
     "user": null,
     "group": null,
     "permission": null,
     "dialog_width": 400,
-    "dialog_height": 200,
-    "dialog_height_2": 240,
+    "dialog_height": 240,
+    "dialog_width_2": frame_info[0] * 0.9,
+    "dialog_height_2": frame_info[1] * 0.9,
 }
 
 var conf = read_config()
-if (empty(conf)) {
-    config_form(ctx)
-} else {
-    if (is_new()) {
-        setup_form(ctx)    
+var conf_status = repeat {
+    if (empty(conf)) {
+        var r = config_form(ctx)
+        if (r["config"] == true) {
+            return r
+        }
+    } else {
+        return true
     }
 }
 
-
-
+if (is_new()) {
+    setup_form(ctx)
+}

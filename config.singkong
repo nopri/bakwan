@@ -70,20 +70,17 @@ var test_db_conn = fn(ctx, t, h, u, p, n) {
 }
 
 var config_form = fn(ctx) {
-    reset()
-    title(_("title_db_config"))
-    closing(_("confirm_quit"), _("title_confirm"))
-    size(ctx["dialog_width"], ctx["dialog_height_2"])
-    resizable(false)
+    var ret = {}
+    var r = []
 
     var g = component("grid", "")
 
     var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
     var btn_connect = c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
-    var btn_quit = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
+    var btn_close = c_btn_(_("cmd_close"), 5, _m("cmd_close"))
     var g_btn = component("grid", "")
     grid_add(g_btn, btn_connect, 0, 0, 1, 1, 1, 0, 0, 1)
-    grid_add(g_btn, btn_quit, 1, 0, 1, 1, 1, 0, 0, 2)
+    grid_add(g_btn, btn_close, 1, 0, 1, 1, 1, 0, 0, 2)
     grid_add(g_btn, btn_save, 2, 0, 1, 1, 0, 0, 0, 2)
 
     var lbl_type = component("label", _("label_db_type"))
@@ -114,8 +111,6 @@ var config_form = fn(ctx) {
     add(g)
 
     set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
-    show()
-
     event(cmb_type, fn() {
         set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
     })
@@ -130,9 +125,19 @@ var config_form = fn(ctx) {
     })
 
     event(btn_save, fn() {
+        set(ret, "command", "save")
+        set(ret, "config", true)
+        custom_dialog_close(last(r))
     })
 
-    event(btn_quit, fn() {
-        frame_close()
+    event(btn_close, fn() {
+        set(ret, "command", "close")
+        custom_dialog_close(last(r))
     })
+
+    custom_dialog(g, _("title_db_config"), 
+        ctx["dialog_width"], ctx["dialog_height"], 
+        true, r)
+
+    return ret
 }
