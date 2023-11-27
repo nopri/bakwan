@@ -48,5 +48,5 @@ var conf_status = repeat {
 }
 
 if (is_new()) {
-    setup_form(ctx)
+    var r = setup_form(ctx)
 }

@@ -131,7 +131,6 @@ var setup_form = fn(ctx) {
     grid_add(g, gp, 0, 2, 4, 1, 1, 20, 3, 0)
     grid_add(g, btn_close, 1, 3, 1, 1, 1, 0, 0, 2)
     grid_add(g, btn_save, 2, 3, 1, 1, 1, 0, 0, 1)
-    add(g)
 
     load_coa(ctx, tbl_coa)
 
