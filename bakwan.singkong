@@ -42,6 +42,7 @@ var conf_status = repeat {
     if (empty(conf)) {
         var r = config_form(ctx)
         if (r["config"] == true | r["command"] == "close") {
+            var conf = read_config()
             return r
         }
     } else {
