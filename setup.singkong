@@ -81,14 +81,13 @@ var account_dialog = fn(ctx, edit) {
 }
 
 var setup_form = fn(ctx) {
-    reset()
-    title(_("title_setup"))
-    closing(_("confirm_quit"), _("title_confirm"))
+    var ret = {}
+    var r = []
 
     var g = component("grid", "")
 
-    var bs = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
-    var bq = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
+    var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
+    var btn_close = c_btn_(_("cmd_close"), 5, _m("cmd_close"))
 
     var tc = c_text(_("label_company"))
 
@@ -130,13 +129,10 @@ var setup_form = fn(ctx) {
     grid_add(g, tc[0], 0, 0, 4, 1, 1, 0, 1, 1)
     grid_add(g, gf, 0, 1, 4, 1, 1, 0, 1, 1)
     grid_add(g, gp, 0, 2, 4, 1, 1, 20, 3, 0)
-    grid_add(g, bq, 1, 3, 1, 1, 1, 0, 0, 2)
-    grid_add(g, bs, 2, 3, 1, 1, 1, 0, 0, 1)
-    add(g)
+    grid_add(g, btn_close, 1, 3, 1, 1, 1, 0, 0, 2)
+    grid_add(g, btn_save, 2, 3, 1, 1, 1, 0, 0, 1)
 
     load_coa(ctx, tbl_coa)
-
-    show()
 
     event(b_coa_n, fn() {
         var d = account_dialog(ctx, {})
@@ -202,7 +198,7 @@ var setup_form = fn(ctx) {
         }
     })
 
-    event(bs, fn() {
+    event(btn_save, fn() {
         var _tc = trim(get(tc[1], "contents"))
         if (empty(_tc)) {
             s_text_label(tc, _("error_company_name"), 1)
@@ -212,7 +208,14 @@ var setup_form = fn(ctx) {
         }
     })
 
-    event(bq, fn() {
-        frame_close()
+    event(btn_close, fn() {
+        set(ret, "command", "close")
+        custom_dialog_close(last(r))
     })
+
+    custom_dialog(g, _("title_setup"), 
+        ctx["dialog_width_2"], ctx["dialog_height_2"], 
+        false, r)
+
+    return ret
 }

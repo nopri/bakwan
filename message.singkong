@@ -15,6 +15,7 @@ var msg = {
     "cmd_delete": "Delete",
     "cmd_reset": "Reset",
     "cmd_test_connect": "Test Connection",
+    "cmd_close": "Close",
     "title_info": "Information",
     "title_error": "Error",
     "title_confirm": "Please confirm",
@@ -58,6 +59,7 @@ var mnemonic = {
     "cmd_delete": 0,
     "cmd_reset": 0,
     "cmd_test_connect": 0,
+    "cmd_close": 0,
 }
 
 var _ = fn(k) {
