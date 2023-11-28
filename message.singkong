@@ -5,7 +5,7 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
-    Budiman (Budyzhang778@gmail.com)
+    Budiman (budyzhang778@gmail.com)
 ;
 
 var msg = {
@@ -54,7 +54,6 @@ var msg = {
 var mnemonic = {
     "cmd_save": 0,
     "cmd_quit": 0,
-
     "cmd_new": 0,
     "cmd_edit": 0,
     "cmd_delete": 0,
