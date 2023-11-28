@@ -5,6 +5,7 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
+    Budiman (budyzhang778@gmail.com)
 ;
 
 var msg = {
@@ -38,8 +39,10 @@ var msg = {
     "error_account_delete": "Please select an account to delete",
     "error_account_invalid": "Please enter valid account details",
     "error_db_connect": "Cannot connect to database",
+    "error_write_file": "File failed to be written",
     "table_coa": "Type,Code,Description",
     "msg_db_connected": "Successfully connected to database",
+    "success_write_file": "File successfully written",
     "_start": "start",
     "_end": "end",
     "_code": "code",
@@ -51,7 +54,7 @@ var msg = {
 var mnemonic = {
     "cmd_save": 0,
     "cmd_quit": 0,
-    "cmd_new": 0,
+    "cmd_new": 0,
     "cmd_edit": 0,
     "cmd_delete": 0,
     "cmd_reset": 0,

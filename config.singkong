@@ -5,7 +5,10 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
-;
+    Budiman (budyzhang778@gmail.com)
+;
+
+
 
 load_module("db_util")
 
@@ -78,7 +81,8 @@ var config_form = fn(ctx) {
     var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
     var btn_connect = c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
     var btn_close = c_btn_(_("cmd_close"), 5, _m("cmd_close"))
-    var g_btn = component("grid", "")
+
+    var g_btn = component("grid", "")
     grid_add(g_btn, btn_connect, 0, 0, 1, 1, 1, 0, 0, 1)
     grid_add(g_btn, btn_close, 1, 0, 1, 1, 1, 0, 0, 2)
     grid_add(g_btn, btn_save, 2, 0, 1, 1, 0, 0, 0, 2)
@@ -125,7 +129,34 @@ var config_form = fn(ctx) {
 
     event(btn_save, fn() {
         set(ret, "command", "save")
-        set(ret, "config", true)
+        set(ret, "config", false) # Set default value of config as false and set true when file save success;
+
+        # Test DB connection, return null if invalid connection;
+        var db = test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        if (db == null) {
+            message(_("error_db_connect"), _("title_error"))
+        } else{
+            var db_type_input = get(cmb_type, "text")
+            var host_input = get(txt_host, "contents")
+            var user_input = get(txt_user, "contents")
+            var password_input = get(pas_db, "contents")
+            var name_input = get(txt_name, "contents")
+            
+            var config_hash = {
+                "db_type": db_type_input,
+                "db_host": host_input,
+                "db_user": user_input,
+                "db_password": password_input,
+                "db_name": name_input
+            }
+
+            if(properties_write(conf_path, config_hash)){
+                message(_("success_write_file"), _("title_info"))
+                set(ret, "config", true)
+            }else{
+                message(_("error_write_file"), _("title_error"))
+            }
+        }
         custom_dialog_close(last(r))
     })
 
