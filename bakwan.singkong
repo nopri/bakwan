@@ -49,8 +49,9 @@ var conf_status = repeat {
     }
 }
 
-if (is_new() & r["command"] == "save") {
+if (is_new() & (!empty(conf))) {
     var r = setup_form(ctx)
 }else{
     frame_close()
 }
+
