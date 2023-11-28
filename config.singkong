@@ -131,7 +131,7 @@ var config_form = fn(ctx) {
         set(ret, "command", "save")
         set(ret, "config", false) # Set default value of config as false and set true when file save success;
 
-        # Test DB connection, return false if invalid connection;
+        # Test DB connection, return null if invalid connection;
         var db = test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
