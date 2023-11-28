@@ -11,9 +11,7 @@ load_module("db_util")
 
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
-# uncomment to get path
-    message(conf_path)
-;
+
 var read_config = fn() {
     return properties_read(conf_path)
 }

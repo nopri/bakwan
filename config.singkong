@@ -149,9 +149,7 @@ var config_form = fn(ctx) {
                 "db_password": password_input,
                 "db_name": name_input
             }
-            # Content confirmation
-                message(config_hash)
-            ;
+
             if(properties_write(conf_path, config_hash)){
                 message(_("success_write_file"), _("title_info"))
                 set(ret, "config", true)
