@@ -69,22 +69,20 @@ Software akuntansi simple yang dibuat dengan bahasa pemrograman [Singkong](https
 
  ## Panduan Penggunaan Aplikasi
  
- 1. Pengguna dapat mengecek apakah bahasa pemrograman Java sudah terinstal di komputer pengguna, dikarenakan bahasa Singkong adalah sebuah interpreter yang kompatibel dengan bahasa pemrograman Java.
+ 1. Pengguna dapat mengecek apakah bahasa pemrograman [**Java**](https://www.java.com/download/ie_manual.jsp) sudah terinstal di komputer pengguna, dikarenakan bahasa Singkong adalah sebuah interpreter yang kompatibel dengan bahasa pemrograman Java.
 
 2. Pengguna dapat mengunduh bahasa pemrograman [**Singkong**](https://nopri.github.io/Singkong.jar) versi terbaru dan aplikasi [**Bakwan**](https://github.com/nopri/bakwan) di tautan yang tersedia.
 
-3. Sebelum pengguna mengunduh bahasa pemrograman singkong, tolong dipastikan pengguna sudah memiliki bahasa pemrograman [**Java**](https://www.java.com/download/ie_manual.jsp) pada perangkat yang digunakan.
-
-4. Buka file main.singkong yang sudah diunduh dari  https://github.com/nopri/bakwan. Lalu jalankan file tersebut.
+3. Buka file main.singkong yang sudah diunduh dari  https://github.com/nopri/bakwan. Lalu jalankan file tersebut.
    
-5. Pengguna akan disajikan tampilan Account Setup dimana pengguna dapat mengisi nama perusahaan, menentukan tahun fiskal, dan menambahkan, menyunting, atau menghapus akun-akun.
+4. Pengguna akan disajikan tampilan Account Setup dimana pengguna dapat mengisi nama perusahaan, menentukan tahun fiskal, dan menambahkan, menyunting, atau menghapus akun-akun.
 
-6. Dalam tabel Chart Of Account akan terdapat Type, Code, dan Description. Dalam tabel tersebut pengguna dapat:
+5. Dalam tabel Chart Of Account akan terdapat Type, Code, dan Description. Dalam tabel tersebut pengguna dapat:
    - menambahkan akun dengan tombol **New** dimana akan diminta mengisi Account Type, Code, dan Description. 
    - Untuk menyunting akun, pengguna harus memilih baris yang diinginkan dan memilih tombol **Edit** yang akan mengubah bagian yang diinginkan dari ketiga hal tersebut. 
    - Untuk menghapus salah satu akun, pengguna perlu memilih baris yang diinginkan sebelum menggunakan **Delete**.
 
-7. Jika sudah selesai, pengguna bisa menekan tombol Save.
+6. Jika sudah selesai, pengguna bisa menekan tombol Save.
 
 
 ## Referensi
