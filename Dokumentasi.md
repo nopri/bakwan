@@ -6,7 +6,7 @@ Software akuntansi simple yang dibuat dengan bahasa pemrograman [Singkong](https
 
 ## Daftar Isi
 
-  1. [Aplikasi Double-Entry Bookkeeping Bakwan](#aplikasi-double-entry-bookkeeping-bakwan)
+  1. [Apa itu *_Double-Entry Bookkeeping_* ?](#apa-itu-double-entry-bookkeeping)
   2. [Links](#links)
   3. [Tahapan Development](#tahapan-development)
   4. [Panduan Penggunaan Aplikasi](#panduan-penggunaan-aplikasi)
