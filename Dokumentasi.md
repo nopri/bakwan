@@ -13,11 +13,11 @@ Software akuntansi simple yang dibuat dengan bahasa pemrograman [Singkong](https
   5. [Referensi](#referensi)
 
 
- ## Apa itu *_Double-Entry Bookkeeping_* ?
+## Apa itu *_Double-Entry Bookkeeping_* ?
 
- **_Double-entry bookkeeping_** bisa juga disebut sebagai sistem pembukuan ganda atau tata buku berpasangan. Double-entry bookkeeping adalah sistem pencatatan seluruh transaksi ke dalam dua aspek, yaitu debit dan kredit yang orientasinya selalu dalam keadaan seimbang. Debit ditulis di kiri dan kredit di kanan.
+**_Double-entry bookkeeping_** bisa juga disebut sebagai sistem pembukuan ganda atau tata buku berpasangan. Double-entry bookkeeping adalah sistem pencatatan seluruh transaksi ke dalam dua aspek, yaitu debit dan kredit yang orientasinya selalu dalam keadaan seimbang. Debit ditulis di kiri dan kredit di kanan.
  
- Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, yaitu di akun debit dan akun kredit. Contohnya, jika sebuah perusahaan meminjam uang sebesar Rp 3.000.000, maka di bagian debit akan ada akun kas sebesar Rp 3.000.000 dan di bagian kredit akan ada akun utang sebesar Rp 3.000.000. Debit dan kredit harus seimbang. _Double-entry bookkeeping_ juga berpegang pada rumus aset sama dengan utang ditambah ekuitas.
+Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, yaitu di akun debit dan akun kredit. Contohnya, jika sebuah perusahaan meminjam uang sebesar Rp 3.000.000, maka di bagian debit akan ada akun kas sebesar Rp 3.000.000 dan di bagian kredit akan ada akun utang sebesar Rp 3.000.000. Debit dan kredit harus seimbang. _Double-entry bookkeeping_ juga berpegang pada rumus aset sama dengan utang ditambah ekuitas.
 
 
 ## Links
@@ -67,9 +67,9 @@ Software akuntansi simple yang dibuat dengan bahasa pemrograman [Singkong](https
     - Bug fix tidak bisa masuk ketika sudah keluar aplikasi.
 
 
- ## Panduan Penggunaan Aplikasi
+## Panduan Penggunaan Aplikasi
  
- 1. Pengguna dapat mengecek apakah bahasa pemrograman [**Java**](https://www.java.com/download/ie_manual.jsp) sudah terinstal di komputer pengguna, dikarenakan bahasa Singkong adalah sebuah interpreter yang kompatibel dengan bahasa pemrograman Java.
+1. Pengguna dapat mengecek apakah bahasa pemrograman [**Java**](https://www.java.com/download/ie_manual.jsp) sudah terinstal di komputer pengguna, dikarenakan bahasa Singkong adalah sebuah interpreter yang kompatibel dengan bahasa pemrograman Java.
 
 2. Pengguna dapat mengunduh bahasa pemrograman [**Singkong**](https://nopri.github.io/Singkong.jar) versi terbaru dan aplikasi [**Bakwan**](https://github.com/nopri/bakwan) di tautan yang tersedia.
 
