@@ -1,0 +1,98 @@
+load_module("csv")
+var credit_file = "credit.csv"
+var credit_path = userhome() + separator() + credit_file
+
+var credit_content = csv_from_string(",", read(credit_path))
+
+# Creates example file if credit file doesn't exitst;
+if(credit_content == null){
+    var csv_example = [[1,"Supervisor"],["Pak Noprianto"], ["blabla"], [1, "Roles"], ["Jona jola"], ["Bola"]]
+
+    write(credit_path, csv_to_string(",",csv_example))
+
+    var credit_content = csv_from_string(",", read(credit_path))
+}
+
+# The CSV example
+    CSV EXAMPLE
+    1,Supervisor
+    Noprianto
+    blabla
+    1,ROLES
+    Jona jola
+    Bola
+    (1:) = bold and as title/header
+;
+
+
+if(!empty(credit_content)){
+    var r = [] 
+}
+
+var call_credits = fn(){
+    # Change sizing here;
+    var w = 400
+    var h = 300
+    var d = [0, h/2, 2, 2]
+    var s = 30
+
+    var small_font_size = 25
+    var big_font_size = 40
+
+    var p = component("panel", "")
+    config(p, "background", "white")
+
+    size(w, h)
+    resizable(false)
+
+    var grid = component("grid", "")
+    config(grid, "background", "")
+
+    # Add credit content here;
+    var lines = [[], [0]]
+    each(credit_content, fn(e, index) {
+        var curr_line = lines[1][0]
+
+        if(e[0] == "1"){
+            set(lines, 0, push(lines[0], component("label", e[1])))
+            config(lines[0][curr_line], "font", ["Times New Roman", 1, big_font_size])
+            config(lines[0][curr_line], "align", 0)
+
+        }else{
+            set(lines, 0, push(lines[0], component("label", e[0])))
+            config(lines[0][curr_line], "font", ["Rockwell", 0, small_font_size])
+            config(lines[0][curr_line], "align", 0)
+        }
+        grid_add(grid, lines[0][curr_line], 0, curr_line, 1, 1, 0, 0, 0, 2)
+        set(lines[1], 0, curr_line + 1) 
+    })
+
+    # Add grid first to panel before attempting to move it;
+    panel_add(p, grid, 0, 0, w, h)
+
+    # Call custom_dialog in a thread so the credits can move;
+    var credit_t = thread(fn(){
+        #
+            custom_dialog(p, _("title_credits"), w, h, true, r)
+        ;
+        custom_dialog(p, "Credits", w, h, true, r)
+    })
+
+    timer(30, fn() {
+        var x = d[0]
+        var y = d[1]
+        var dx = d[2]
+        var dy = d[3]
+
+        if (y < -h) {
+            var y = h
+        }
+        var y = y - dy
+
+        set(d, 1, y)
+        set(d, 2, dx)
+        set(d, 3, dy)
+        panel_add(p, grid, x, y, w, h)
+    })
+}
+call_credits()
