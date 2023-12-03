@@ -29,7 +29,7 @@ var default_fiscal_end = fn() {
 }
 
 var load_coa = fn(ctx, tbl) {
-    if (is_new()) {
+    if (is_new(ctx)) {
         config(tbl, "contents", accounts_template)
     }
 }
