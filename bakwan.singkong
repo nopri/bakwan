@@ -21,12 +21,17 @@ var app_name = "Bakwan"
 
 reset()
 title(app_name)
-closing(_("confirm_quit"), _("title_confirm"))
 show()
 
 var frame_info = frame()
 var ctx = {
     "name": app_name,
+
+    "db": null,
+    "db_type": "",
+    "db_host": "",
+    "db_name": "",
+
     "user": null,
     "group": null,
     "permission": null
@@ -37,12 +42,22 @@ var ctx = {
     "dialog_height_2": frame_info[1] * 0.9,
 }
 
-var conf = read_config()
+var init_ui = fn(ctx) {
+    var status_db = upper(_("_db_connected"), true) + " " + 
+        "(" + ctx["db_type"] + ") " + ctx["db_name"] 
+    statusbar(0, status_db, true)
+
+    timer(1000, fn() {
+        statusbar(1, string(@), true)
+    })
+}
+
+var conf = read_config(ctx)
 var conf_status = repeat {
     if (empty(conf)) {
         var r = config_form(ctx)
         if (r["config"] == true | r["command"] == "close") {
-            var conf = read_config()
+            var conf = read_config(ctx)
             return r
         }
     } else {
@@ -50,9 +65,32 @@ var conf_status = repeat {
     }
 }
 
-if (is_new() & (!empty(conf))) {
-    var r = setup_form(ctx)
-}else{
+if (empty(conf)) {
     frame_close()
-}
+} else {
+    var db = get_db(ctx)
+    if (db == null) {
+        var m = _("error_db_connect") + lf() + _("confirm_config_reset")
+        var r = confirm(m, _("title_confirm"))
+        if (r == "OK") {
+            if (properties_write(conf_path, {})) {
+                message(_("info_app_restart"), _("title_info"))
+            } else {
+                message(_("error_config_write"), _("title_error"))
+            }
+        }
+        frame_close()
+    } else {
+        set(ctx, "db", db)
+        set(ctx, "db_type", conf["db_type"])
+        set(ctx, "db_host", conf["db_host"])
+        set(ctx, "db_name", conf["db_name"])
 
+        closing(_("confirm_quit"), _("title_confirm"))
+
+        init_ui(ctx)
+        if (is_new(ctx)) {
+            var r = setup_form(ctx)
+        }
+    }
+}

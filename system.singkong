@@ -12,15 +12,53 @@ load_module("db_util")
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
 
-var read_config = fn() {
+var db_types = [
+    "User",
+    "Embedded",
+    "Network",
+    "PostgreSQL"
+]
+var db_types_ = join(",", db_types)
+
+var read_config = fn(ctx) {
     return properties_read(conf_path)
 }
 
-var get_db = fn() {
+var connect_db = fn(ctx, dt, dh, du, dp, dn) {
+    var n = ctx["name"]
+    if (n == null) {
+        return n
+    }
+
+    var c = "//" + dh + "/" + dn
+    if (dt == "User") {
+        return db_connect_embed_user(n)
+    } 
+    if (dt == "Embedded") {
+        return db_connect_embed(dn)
+    }
+    if (dt == "Network") {
+        return db_connect("derby", c, du, dp)
+    }
+    if (dt == "PostgreSQL") {
+        return db_connect("postgresql", c, du, dp)
+    }
     return null
 }
 
-var is_new = fn() {
-    return true
+var get_db = fn(ctx) {
+    var conf = read_config(ctx)
+    var db_host = conf["db_host"]
+    var db_user = conf["db_user"]
+    var db_password = conf["db_password"]
+    var db_name = conf["db_name"]
+    var db_type = conf["db_type"]
+    return connect_db(ctx, 
+        db_type, db_host, db_user, db_password,
+        db_name)
 }
 
+var is_new = fn(ctx) {
+    return true
+}
+
