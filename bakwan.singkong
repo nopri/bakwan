@@ -33,7 +33,8 @@ var ctx = {
     "db_name": "",
 
     "user": null,
-    "group": null,
+    "user_id": null,
+    "group_id": null,
     "permission": null
 ,
     "dialog_width": 400,
@@ -43,6 +44,8 @@ var ctx = {
 }
 
 var init_ui = fn(ctx) {
+    closing(_("confirm_quit"), _("title_confirm"))
+
     var status_db = upper(_("_db_connected"), true) + " " + 
         "(" + ctx["db_type"] + ") " + ctx["db_name"] 
     statusbar(0, status_db, true)
@@ -50,6 +53,8 @@ var init_ui = fn(ctx) {
     timer(1000, fn() {
         statusbar(1, string(@), true)
     })
+
+    var r = setup_form(ctx)
 }
 
 var conf = read_config(ctx)
@@ -86,11 +91,52 @@ if (empty(conf)) {
         set(ctx, "db_host", conf["db_host"])
         set(ctx, "db_name", conf["db_name"])
 
-        closing(_("confirm_quit"), _("title_confirm"))
-
-        init_ui(ctx)
         if (is_new(ctx)) {
-            var r = setup_form(ctx)
+            var r = system_init_db(ctx)
+            if (r == null) {
+                message(_("error_db_init"), _("title_error"))
+                frame_close()
+            } 
+            message(
+                _("success_db_init") + lf() +
+                _("info_app_user") + ": " + lf() +
+                upper(_("_username"), true) + ": " + 
+                db_system_default_user + lf() +
+                upper(_("_password"), true) + ": " + 
+                db_system_default_password + lf(),
+                _("title_info")
+            )
+        }
+
+        var r_auth = repeat {
+            var r = login_dialog(
+                _("title_login"),
+                upper(_("_username"), true),
+                upper(_("_password"), true)
+            )
+            if (len(r) > 1) {
+                var u = r[0]
+                var p = r[1]
+                var r_auth = system_auth(ctx, u, p)
+                if (len(r_auth) == 3) {
+                    return r_auth
+                } else {
+                    message(
+                        _("error_auth"),
+                        _("title_info")
+                    )
+                }
+            } else {
+                return []
+            }
+        }
+        if (len(r_auth) == 3) {
+            set(ctx, "user_id", r_auth[0])
+            set(ctx, "group_id", r_auth[1])
+            set(ctx, "user", r_auth[2])
+            init_ui(ctx)
+        } else {
+            frame_close()
         }
     }
 }
