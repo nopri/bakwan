@@ -25,7 +25,7 @@ var msg = {
     "title_account_edit": "Edit account",
     "title_account_delete": "Delete account",
     "title_db_config": "Database configuration",
-    "title_credits": "Credits",
+    "title_login": "Login",
     "confirm_quit": "Are you sure you want to quit this application?",
     "confirm_account_delete": "Are you sure you want to delete the following account?",
     "label_company": "Company name",
@@ -41,11 +41,15 @@ var msg = {
     "error_account_invalid": "Please enter valid account details",
     "error_db_connect": "Cannot connect to database",
     "error_config_write": "Failed to save configuration",
+    "error_db_init": "Error initializing database",
+    "error_auth": "Incorrect username or password",
     "table_coa": "Type,Code,Description",
     "success_db_connected": "Successfully connected to database",
     "success_config_write": "Successfully updated configuration",
-    "confirm_config_reset": "Do you want to reset the database configuration?",
+    "success_db_init": "Successfully initialized database", 
+   "confirm_config_reset": "Do you want to reset the database configuration?",
     "info_app_restart": "Please start over the application",
+    "info_app_user": "Default username and password",
     "_start": "start",
     "_end": "end",
     "_code": "code",
@@ -53,7 +57,8 @@ var msg = {
     "_db_connected": "database connected",
     "_description": "description",
     "_account_type": "account type",
-
+    "_username": "username",
+    "_password": "password",
 }
 
 var mnemonic = {
