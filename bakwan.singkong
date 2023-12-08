@@ -16,11 +16,14 @@ load_file_or_resource("ui.singkong")
 load_file_or_resource("setup.singkong")
 load_file_or_resource("message.singkong")
 load_file_or_resource("config.singkong")
+load_file_or_resource("credits.singkong")
+load_file_or_resource("dashboard.singkong")
 
 var app_name = "Bakwan"
 
 reset()
 title(app_name)
+
 show()
 
 var frame_info = frame()
@@ -135,8 +138,15 @@ if (empty(conf)) {
             set(ctx, "group_id", r_auth[1])
             set(ctx, "user", r_auth[2])
             init_ui(ctx)
+            
+            # Dashboard starts from here;
+            var main_dashboard = call_dashboard()
+            add(main_dashboard)
         } else {
             frame_close()
         }
     }
 }
+
+
+

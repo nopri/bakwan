@@ -6,79 +6,82 @@ var credit_content = csv_from_string(",", read(credit_path))
 
 # Creates example file if credit file doesn't exitst;
 if(credit_content == null){
-    var csv_example = [[1,"Supervisor"],["Pak Noprianto"], ["blabla"], [1, "Roles"], ["Jona jola"], ["Bola"]]
+    var csv_example = [[2, "Bakwan"], [1,"Supervisor"],[0, "Pak Noprianto"], [0, "blabla"], [1, "Roles"], [0, "Jona jola"], [0, "Bola"]]
 
     write(credit_path, csv_to_string(",",csv_example))
 
     var credit_content = csv_from_string(",", read(credit_path))
+    message("Example file has been created")
 }
 
 # The CSV example
     CSV EXAMPLE
+    2,Bakwan
     1,Supervisor
-    Noprianto
-    blabla
+    0,Noprianto
+    0,blabla
     1,ROLES
-    Jona jola
-    Bola
+    0,Jona jola
+    0,Bola
     (1:) = bold and as title/header
 ;
 
-
-if(!empty(credit_content)){
-    var r = [] 
+var small_font_size = 25
+var big_font_size = 40
+var title_font_size = 60
+var font_list = {
+    "0": ["Rockwell", 0, small_font_size],
+    "1": ["Times New Roman", 1, big_font_size],
+    "2": ["Times New Roman", 3, title_font_size]
 }
 
-var call_credits = fn(){
-    # Change sizing here;
-    var w = 400
-    var h = 300
+var call_credits = fn(w, h){
     var d = [0, h/2, 2, 2]
     var s = 30
 
-    var small_font_size = 25
-    var big_font_size = 40
-
     var p = component("panel", "")
-    config(p, "background", "white")
-
-    size(w, h)
-    resizable(false)
 
     var grid = component("grid", "")
-    config(grid, "background", "")
+    config(grid, "background", "white")
 
     # Add credit content here;
-    var lines = [[], [0]]
+    var lines = [[]]
+    var default_w = 1000
     each(credit_content, fn(e, index) {
-        var curr_line = lines[1][0]
-
-        if(e[0] == "1"){
-            set(lines, 0, push(lines[0], component("label", e[1])))
-            config(lines[0][curr_line], "font", ["Times New Roman", 1, big_font_size])
-            config(lines[0][curr_line], "align", 0)
-
-        }else{
-            set(lines, 0, push(lines[0], component("label", e[0])))
-            config(lines[0][curr_line], "font", ["Rockwell", 0, small_font_size])
-            config(lines[0][curr_line], "align", 0)
+        var curr_font = font_list[e[0]];
+        if(curr_font == null){
+            var curr_font = font_list[0]
         }
-        grid_add(grid, lines[0][curr_line], 0, curr_line, 1, 1, 0, 0, 0, 2)
-        set(lines[1], 0, curr_line + 1) 
+        var original_size = curr_font[2] 
+        var adjusted_size = (w-default_w) * 0.01
+        set(curr_font, 2, curr_font[2] + adjusted_size)
+
+        set(lines, 0, push(lines[0], component("label", e[1])))
+        config(lines[0][index], "font", curr_font)
+
+        # Reset size to original;
+        set(curr_font, 2, original_size)
+        if(e[0] == "0"){
+            config(lines[0][index], "align", 0)
+            grid_add(grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0)
+        }else{
+            grid_add(grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
+        }
     })
 
     # Add grid first to panel before attempting to move it;
-    panel_add(p, grid, 0, 0, w, h)
+    panel_add(p, grid, 0, 0, w *0.8, h *0.9)
+    return [p, grid, d]
+}
 
-    # Call custom_dialog in a thread so the credits can move;
-    var credit_t = thread(fn(){
-        #
-            custom_dialog(p, _("title_credits"), w, h, true, r)
-        ;
-        custom_dialog(p, "Credits", w, h, true, r)
-    })
 
+var roll_credits = fn(p, grid, d){
     timer(30, fn() {
+        # Call frame to get new size if frame is resized during loop;
+        var frame_info = frame()
+        var w =  frame_info[0]
+        var h = frame_info[1]
+
         var x = d[0]
         var y = d[1]
         var dx = d[2]
@@ -92,7 +95,13 @@ var call_credits = fn(){
         set(d, 1, y)
         set(d, 2, dx)
         set(d, 3, dy)
-        panel_add(p, grid, x, y, w, h)
+        
+        # Rough guess on center frame based on w size; 
+        if(w < 1200){
+            panel_add(p, grid, x, y, w *0.8, h *0.9)
+        }else{
+            panel_add(p, grid, x, y, w *0.9, h *0.9)
+        }
     })
 }
-call_credits()
+
