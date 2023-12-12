@@ -41,8 +41,8 @@ var call_credits = fn(w, h){
 
     var p = component("panel", "")
 
-    var grid = component("grid", "")
-    config(grid, "background", "white")
+    var credit_grid = component("grid", "")
+    d_grid(credit_grid)
 
     # Add credit content here;
     var lines = [[]]
@@ -63,45 +63,45 @@ var call_credits = fn(w, h){
         set(curr_font, 2, original_size)
         if(e[0] == "0"){
             config(lines[0][index], "align", 0)
-            grid_add(grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0)
+            grid_add(credit_grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0)
         }else{
-            grid_add(grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
+            grid_add(credit_grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
         }
     })
 
     # Add grid first to panel before attempting to move it;
-    panel_add(p, grid, 0, 0, w *0.8, h *0.9)
-    return [p, grid, d]
+    panel_add(p, credit_grid, 0, 0, w, h)
+    return [p, credit_grid, d]
 }
 
 
 var roll_credits = fn(p, grid, d){
-    timer(30, fn() {
+    var credit_timer = timer(30, fn() {
         # Call frame to get new size if frame is resized during loop;
-        var frame_info = frame()
-        var w =  frame_info[0]
-        var h = frame_info[1]
-
-        var x = d[0]
-        var y = d[1]
-        var dx = d[2]
-        var dy = d[3]
-
-        if (y < -h) {
-            var y = h
-        }
-        var y = y - dy
-
-        set(d, 1, y)
-        set(d, 2, dx)
-        set(d, 3, dy)
-        
-        # Rough guess on center frame based on w size; 
-        if(w < 1200){
-            panel_add(p, grid, x, y, w *0.8, h *0.9)
+        var panel_info = component_info(p)
+        if(panel_info == null){
+            stop_timer(credit_timer)
         }else{
-            panel_add(p, grid, x, y, w *0.9, h *0.9)
+            var w =  panel_info[4]
+            var h = panel_info[5]
+
+            var x = d[0]
+            var y = d[1]
+            var dx = d[2]
+            var dy = d[3]
+
+            if (y < -h) {
+                var y = h * 0.8
+            }
+            var y = y - dy
+
+            set(d, 1, y)
+            set(d, 2, dx)
+            set(d, 3, dy)
+            
+            panel_add(p, grid, x, y, w, h)
         }
+
     })
 }
 

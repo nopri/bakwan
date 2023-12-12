@@ -40,35 +40,39 @@ var db_event_dashboard = fn(){
     var conf_grid = config_form(ctx)
 }
 var credit_event_dashboard = fn(){
-    var frame_info = frame()
-    var credits_content = call_credits(frame_info[0], frame_info[1])
+    var size_info = component_info(dashboard_content)
+    var credits_content = call_credits(size_info[4], size_info[5])
     var credit_panel = credits_content[0]
     var credit_inner_grid = credits_content[1]
     var credit_details = credits_content[2]
     replace_dashboard_content(credit_panel)
-
     roll_credits(credit_panel, credit_inner_grid, credit_details)
 }
+
 var home_event_sidebar = fn(){
     var home_grid = component("grid", "Home")
     config(home_grid, "background", color_pallete["default"])
     var home_label = component("label", "Empty for now")
     grid_add(home_grid, home_label, 0,0, 1,1, 1,1, 3, 0)
     replace_dashboard_content(home_grid)
+
+    var header_label = component("label", "Dashboard")
+    config(header_label, "font", ["Montserrat", 1, 30])
+    grid_add(dashboard_content, header_label, 0, 0, 1, 1, 1, 0, 3, 3, 10, 15, 10, 10)
 }
 
 
 # Utility function to empty sidebar;
 var clear_sidebar = fn(){
-    if(!empty(dashboard_buttons[0])){
-        each(dashboard_buttons[0], fn(e, index){
-            grid_remove(dashboard_menu, last(dashboard_buttons[0]))
-            set(dashboard_buttons, 0, pop(dashboard_buttons[0]))    
+    if(!empty(dashboard_components[0])){
+        each(dashboard_components[0], fn(e, index){
+            grid_remove(dashboard_menu, last(dashboard_components[0]))
+            set(dashboard_components, 0, pop(dashboard_components[0]))    
         })
     }
 }
 
-var dashboard_buttons = [[], [0]]
+var dashboard_components = [[], [0]]
 
 # Function for generating an empty panel to fill parts of the page;
 var get_filler  = fn(font_choice){
@@ -100,27 +104,22 @@ var maximize_sidebar = fn(){
         config(temp_button, "align", 0)
         set(sidebar_font, 2, original_size)
 
-        set(dashboard_buttons, 0, push(dashboard_buttons[0], temp_button))
-        set(dashboard_buttons[1], 0, index)
-        event(last(dashboard_buttons[0]), dashboard_list[e])
-        grid_add(dashboard_menu, last(dashboard_buttons[0]), 1, index + 1, 1, 1, 4, 0, 3, 1, 0, 0, 2, 0)
+        set(dashboard_components, 0, push(dashboard_components[0], temp_button))
+        set(dashboard_components[1], 0, index)
+        event(last(dashboard_components[0]), dashboard_list[e])
+        grid_add(dashboard_menu, last(dashboard_components[0]), 1, index + 1, 1, 1, 4, 0, 3, 1, 0, 0, 2, 0)
     })
     var app_label = component("label", app_name)
     config(app_label, "font", ["Montserrat", 1, 33 + adjusted_size])
     config(app_label, "foreground", color_pallete["white"])
-
     config(app_label, "align", 1)
     grid_add(dashboard_menu, app_label, 1, 0, 1, 1, 1, 1, 3, 3, 0, 6, 0, 0)
-    set(dashboard_buttons, 0, push(dashboard_buttons[0], app_label))
+    set(dashboard_components, 0, push(dashboard_components[0], app_label))
 
     var filler_panel = get_filler("dark")
-    var curr_index = dashboard_buttons[1][0]
+    var curr_index = dashboard_components[1][0]
     grid_add(dashboard_menu, filler_panel, 1, curr_index + 2, 1, 1, 4, 5, 3, 1, 0, 0, 0, 0)
-    set(dashboard_buttons, 0, push(dashboard_buttons[0], filler_panel))
-    
-    var header_label = component("label", "Dashboard")
-    config(header_label, "font", ["Montserrat", 1, 30])
-    grid_add(dashboard_content, header_label, 0, 0, 1, 1, 1, 0, 3, 3, 10, 15, 10, 10)
+    set(dashboard_components, 0, push(dashboard_components[0], filler_panel))
 
 }
 
@@ -135,14 +134,14 @@ var minimize_sidebar = fn(){
     config(temp_button, "font", sidebar_font)
     set(sidebar_font, 2, original_size)
 
-    set(dashboard_buttons, 0, push(dashboard_buttons[0], temp_button))
-    event(last(dashboard_buttons[0]), maximize_sidebar)
-    grid_add(dashboard_menu, last(dashboard_buttons[0]), 1, 0, 1, 1, 2, 0, 3, 1, 0, 0, 0, 0)
+    set(dashboard_components, 0, push(dashboard_components[0], temp_button))
+    event(last(dashboard_components[0]), maximize_sidebar)
+    grid_add(dashboard_menu, last(dashboard_components[0]), 1, 0, 1, 1, 2, 0, 3, 1, 0, 0, 0, 0)
 
     var filler_panel = get_filler("dark")
-    var curr_index = dashboard_buttons[1][0]
+    var curr_index = dashboard_components[1][0]
     grid_add(dashboard_menu, filler_panel, 1, curr_index + 1, 1, 1, 4, 5, 3, 1, 0, 0, 0, 0)
-    set(dashboard_buttons, 0, push(dashboard_buttons[0], filler_panel))
+    set(dashboard_components, 0, push(dashboard_components[0], filler_panel))
 }
 
 
@@ -155,9 +154,34 @@ var dashboard_list = {
     "Credits": credit_event_dashboard
 }
 
+
 # Main Function for dashboard;
 var call_dashboard = fn(){
     maximize_sidebar()
     home_event_sidebar()
+
+    var sidebar_font_size = 15
+    var title_font_size = 30
+
+    # Event to adjust font size of sidebar;
+    event_frame(fn(x) {
+        if(x[0] == "RESIZED"){
+            var adjustment_value = get_font_adjustment()
+            each(dashboard_components[0], fn(e, index){
+                
+                var curr_comp = dashboard_components[0][index]
+                var comp_font = get(curr_comp, "font")
+
+                if(component_type(curr_comp) == "label"){
+                    var original_size = title_font_size
+                }else{
+                    var original_size = sidebar_font_size
+                }
+
+                set(comp_font, 2, original_size + adjustment_value)
+                config(curr_comp, "font", comp_font)
+            })
+        }
+    })
     return main_dashboard
 }
