@@ -29,9 +29,7 @@ var default_fiscal_end = fn() {
 }
 
 var load_coa = fn(ctx, tbl) {
-    if (is_new(ctx)) {
-        config(tbl, "contents", accounts_template)
-    }
+    config(tbl, "contents", accounts_template)
 }
 
 var set_account_code = fn(cmb, msk) {
