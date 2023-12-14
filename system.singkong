@@ -11,7 +11,8 @@ load_module("db_util")
 
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
-var system_db_version = 1
+
+var system_db_version = 1
 
 var db_types = [
     "User",
@@ -231,7 +232,9 @@ var system_upgrade_db = fn(ctx) {
         if (v == latest) {
             return false
         }
-
+        if(v == null){
+            return null
+        }
         if (v == 1) {
             var sql_v1 = "alter table user_account 
                 add constraint fk_user_account_group_id 
