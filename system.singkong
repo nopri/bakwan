@@ -224,39 +224,66 @@ var system_upgrade_db = fn(ctx) {
     }
     var dt = ctx["db_type"]
 
-    var v = system_db_get_version(ctx)
+    var latest = 3
+    var res = []
+    var r = repeat {
+        var v = system_db_get_version(ctx)
+        if (v == latest) {
+            return false
+        }
 
-    if (in(db_types_derby, dt)) {
         if (v == 1) {
-            var r = db_query_simple(db, 
-                "alter table user_account 
+            var sql_v1 = "alter table user_account 
                 add constraint fk_user_account_group_id 
                 foreign key (user_account_group_id)
                 references user_group(user_group_id)
-                " 
-            )
+                "
+            var r = db_query_simple(db, sql_v1)
             if (r == null) {
                 return null
             }
-            system_db_set_version(ctx, 2)
+        }
+
+        if (v == 2) {
+            var account_col = [
+                ["account_id", "id."],
+                ["account_type", "integer"],
+                ["code", "varchar"],
+                ["description", "varchar"]
+            ]
+
+            if (in(db_types_derby, dt)) {
+                var r = db_create_table_derby(db, "account", account_col)
+                if (r[0] == null) {
+                    return null                
+                }
+            }
+            if (dt == db_types_pg) {
+                var r = db_create_table_postgresql(db, "account", account_col)
+                if (r[0] == null) {
+                    return null                
+                }
+            }
+        }
+
+        var cv = v + 1
+        var rv = system_db_set_version(ctx, cv)
+        if (rv == null) {
+            return null
+        }
+        if (rv == true) {
+            res + rv
+        }
+        if (cv == latest) { 
             return true
         }
     }
-    if (dt == db_types_pg) {
-        if (v == 1) {
-            var r = db_query_simple(db, 
-                "alter table user_account 
-                add constraint fk_user_account_group_id 
-                foreign key (user_account_group_id)
-                references user_group(user_group_id)
-                " 
-            )
-            if (r == null) {
-                return null
-            }
-            system_db_set_version(ctx, 2)
-            return true
-        }
+
+    if (r == null) {
+        return null
+    }
+    if (is_array_of(res, "BOOLEAN")) {
+        return true
     }
     return false
 }
