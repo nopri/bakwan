@@ -27,6 +27,12 @@ var s = screen()
 size(s[0] * 0.9, s[1] * 0.9)
 show()
 
+# Credit format is ("role":[names_array]);
+var authors_list = {
+    "Supervisor": ["Pak Noprianto", "Pak Andi"],
+    "Documentation": ["Ali", "Bob", "Charlie"]
+}
+
 var frame_info = frame()
 var ctx = {
     "name": app_name,
@@ -198,7 +204,7 @@ if (empty(conf)) {
             init_ui(ctx)
             
             # Dashboard starts from here;
-            var main_dashboard = call_dashboard()
+            var main_dashboard = call_dashboard(ctx)
             add(main_dashboard)
         } else {
             frame_close()

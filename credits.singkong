@@ -1,41 +1,40 @@
-load_module("csv")
-var credit_file = "credit.csv"
-var credit_path = userhome() + separator() + credit_file
 
-var credit_content = csv_from_string(",", read(credit_path))
+var conf_name = "bakwan.properties"
+var conf_path = userhome() + separator() + conf_name
 
-# Creates example file if credit file doesn't exitst;
-if(credit_content == null){
-    var csv_example = [[2, "Bakwan"], [1,"Supervisor"],[0, "Pak Noprianto"], [0, "blabla"], [1, "Roles"], [0, "Jona jola"], [0, "Bola"]]
+var conf_content = properties_read(conf_path)
 
-    write(credit_path, csv_to_string(",",csv_example))
-
-    var credit_content = csv_from_string(",", read(credit_path))
-    message("Example file has been created")
-}
-
-# The CSV example
-    CSV EXAMPLE
-    2,Bakwan
-    1,Supervisor
-    0,Noprianto
-    0,blabla
-    1,ROLES
-    0,Jona jola
-    0,Bola
-    (1:) = bold and as title/header
-;
 
 var small_font_size = 25
 var big_font_size = 40
 var title_font_size = 60
+var default_w = 1000
 var font_list = {
-    "0": ["Rockwell", 0, small_font_size],
-    "1": ["Times New Roman", 1, big_font_size],
-    "2": ["Times New Roman", 3, title_font_size]
+    0: ["Rockwell", 0, small_font_size],
+    1: ["Times New Roman", 1, big_font_size],
+    2: ["Times New Roman", 3, title_font_size]
 }
 
+var return_adjusted_font = fn(w, font_choice){
+    var curr_font = font_list[font_choice];
+    if(curr_font == null){
+        var curr_font = font_list[0]
+    }
+    var original_size = curr_font[2] 
+    var adjusted_size = (w-default_w) * 0.01
+    set(curr_font, 2, curr_font[2] + adjusted_size)
+
+    var ret_font = curr_font
+    # Reset size to original;
+    set(curr_font, 2, original_size)
+
+    return ret_font
+} 
+
 var call_credits = fn(w, h){
+    # Add credit content from global variable;
+    var credit_content = variables()["AUTHORS_LIST"][1]
+
     var d = [0, h/2, 2, 2]
     var s = 30
 
@@ -44,29 +43,32 @@ var call_credits = fn(w, h){
     var credit_grid = component("grid", "")
     d_grid(credit_grid)
 
-    # Add credit content here;
-    var lines = [[]]
-    var default_w = 1000
-    each(credit_content, fn(e, index) {
-        var curr_font = font_list[e[0]];
-        if(curr_font == null){
-            var curr_font = font_list[0]
-        }
-        var original_size = curr_font[2] 
-        var adjusted_size = (w-default_w) * 0.01
-        set(curr_font, 2, curr_font[2] + adjusted_size)
+    # lines[1] act as index;
+    var lines = [[], 0]
 
-        set(lines, 0, push(lines[0], component("label", e[1])))
-        config(lines[0][index], "font", curr_font)
+    each(keys(credit_content), fn(e, index) {
+        # Role loop;
+        var author_names = credit_content[e]
+        var header_font = return_adjusted_font(w, 1)
+        set(lines, 0, push(lines[0], component("label", e)))
+        config(lines[0][lines[1]], "font", header_font)
 
-        # Reset size to original;
-        set(curr_font, 2, original_size)
-        if(e[0] == "0"){
-            config(lines[0][index], "align", 0)
-            grid_add(credit_grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0)
-        }else{
-            grid_add(credit_grid, lines[0][index], 0, index, 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
-        }
+        config(lines[0][lines[1]], "align", 1)
+        grid_add(credit_grid, lines[0][lines[1]], 0, lines[1], 1, 1, 0, 0, 2, 0)
+        
+        set(lines, 1, lines[1] + 1)
+        each(author_names, fn(sub_e, sub_index){
+            # Name loop;
+            var body_font = return_adjusted_font(w, 0)
+
+            set(lines, 0, push(lines[0], component("label", sub_e)))
+            message(lines[1] + " : "+ lines[0][lines[1]])
+            config(lines[0][lines[1]], "font", body_font)
+            grid_add(credit_grid, lines[0][lines[1]], 0, lines[1], 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
+            
+            set(lines, 1, lines[1] + 1)
+        })
+
     })
 
     # Add grid first to panel before attempting to move it;

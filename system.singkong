@@ -8,10 +8,11 @@
 ;
 
 load_module("db_util")
-
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
-var system_db_version = 1
+
+
+var system_db_version = 1
 
 var db_types = [
     "User",

@@ -8,7 +8,7 @@ var color_pallete = {
     "grey": "grey",
     "default": ""
 }
-
+var credit_ctx = null
 var main_dashboard = component("grid", "")
 
 var dashboard_content = component("grid", "")
@@ -156,7 +156,8 @@ var dashboard_list = {
 
 
 # Main Function for dashboard;
-var call_dashboard = fn(){
+var call_dashboard = fn(ctx){
+    var credit_ctx = ctx
     maximize_sidebar()
     home_event_sidebar()
 
