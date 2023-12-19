@@ -1,3 +1,13 @@
+#
+    dashboard.singkong
+    Main dashboard file including utilities
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+    Budiman (Budyzhang778@gmail.com)
+;
+
 var color_pallete = {
     "dark": "-16635078",
     "dark_middle": "-14714228",
@@ -72,7 +82,12 @@ var clear_sidebar = fn(){
     }
 }
 
-var dashboard_components = [[], [0]]
+var dashboard_components = [[], [0], 0]
+# Regarding dashboard_components
+[0]: to store components, 
+[1]: to store the current index, 
+[2]: to store the current active button
+;
 
 # Function for generating an empty panel to fill parts of the page;
 var get_filler  = fn(font_choice){
@@ -99,6 +114,37 @@ var get_font_adjustment = fn(){
     return calc_value
 }
 
+var remove_highlight_dashboard = fn(){
+    each(dashboard_components[0], fn(e, index){
+        if(component_type(e) == "button"){
+            d_btn(e, 6)
+        }
+    })
+}
+# Function to add mouse event to dashboard buttons;
+var add_mouse_event_component = fn(){
+    each(dashboard_components[0], fn(e, index){
+        if(component_type(e) == "button"){
+            event_mouse(e, fn(x){
+                if(x[0] == "ENTERED"){
+                    d_btn(e, 7)
+                }
+                if(x[0] == "EXITED"){
+                    if(dashboard_components[2] != index){
+                        d_btn(e, 6)
+                    }
+                }
+                if(x[0] == "CLICKED"){
+                    remove_highlight_dashboard()
+                    set(dashboard_components, 2, index)
+                    d_btn(e, 7)
+                }
+                
+            })
+        }
+    })
+}
+
 # Function used to create sidebar;
 var maximize_sidebar = fn(){
     clear_sidebar()
@@ -107,6 +153,10 @@ var maximize_sidebar = fn(){
 
     each(keys(dashboard_list), fn(e, index){
         var temp_button = c_btn_(e, 6, 0)
+        if(e == "Home"){
+            d_btn(temp_button, 7)
+            set(dashboard_components, 2, index + 1)
+        }
 
         var original_size = sidebar_font[2] 
         set(sidebar_font, 2, sidebar_font[2] + adjusted_size)
@@ -138,14 +188,14 @@ var maximize_sidebar = fn(){
     var curr_index = dashboard_components[1][0]
     grid_add(dashboard_menu, filler_panel, 1, curr_index + 2, 1, 1, 4, 5, 3, 1, 0, 0, 0, 0)
     set(dashboard_components, 0, push(dashboard_components[0], filler_panel))
-
+    add_mouse_event_component()
 }
 
 var minimize_sidebar = fn(){
     clear_sidebar()
 
     var sidebar_font = ["Merriweather", 0, 15]
-    var temp_button = c_btn_("show", 6, 0)
+    var temp_button = c_btn_("Show", 6, 0)
     var original_size = sidebar_font[2] 
     var adjusted_size = get_font_adjustment()
     set(sidebar_font, 2, sidebar_font[2] + adjusted_size)
@@ -155,18 +205,9 @@ var minimize_sidebar = fn(){
 
     set(dashboard_components, 0, push(dashboard_components[0], temp_button))
     event(last(dashboard_components[0]), maximize_sidebar)
-    grid_add(dashboard_menu, last(dashboard_components[0]), 1, 0, 1, 1, 2, 0, 3, 1, 0, 0, 0, 0)
-
-    var panel_temp = component("panel", "")
-    d_grid(panel_temp)
-    set(dashboard_components, 0, push(dashboard_components[0], panel_temp))
-    event(last(dashboard_components[0]), maximize_sidebar)
-    grid_add(dashboard_menu, last(dashboard_components[0]), 0, 0, 1, 1, 1, 0, 3, 0)
-
-    var filler_panel = get_filler("dark")
-    var curr_index = dashboard_components[1][0]
-    grid_add(dashboard_menu, filler_panel, 1, curr_index + 1, 1, 1, 4, 5, 3, 1, 0, 0, 0, 0)
-    set(dashboard_components, 0, push(dashboard_components[0], filler_panel))
+    grid_add(dashboard_menu, last(dashboard_components[0]), 1, 0, 1, 1, 2, 1, 3, 1, 0, 0, 0, 0)
+    
+    add_mouse_event_component()
 }
 
 

@@ -1,3 +1,12 @@
+#
+    credit.singkong
+    Credit page utilities
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+    Budiman (Budyzhang778@gmail.com)
+;
 
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
