@@ -62,7 +62,6 @@ var call_credits = fn(w, h){
             var body_font = return_adjusted_font(w, 0)
 
             set(lines, 0, push(lines[0], component("label", sub_e)))
-            message(lines[1] + " : "+ lines[0][lines[1]])
             config(lines[0][lines[1]], "font", body_font)
             grid_add(credit_grid, lines[0][lines[1]], 0, lines[1], 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
             

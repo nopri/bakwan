@@ -86,7 +86,17 @@ var get_font_adjustment = fn(){
     var frame_info = frame()
     var default_w = 1000
     var w = frame_info[0]
-    return (w-default_w) * 0.01
+
+    var min_value = -1
+    var max_value = 7
+    var calc_value = (w-default_w) * 0.01
+    if(calc_value > max_value){
+        return max_value
+    }
+    if(calc_value < min_value){
+        return min_value
+    }
+    return calc_value
 }
 
 # Function used to create sidebar;
@@ -102,12 +112,20 @@ var maximize_sidebar = fn(){
         set(sidebar_font, 2, sidebar_font[2] + adjusted_size)
         config(temp_button, "font", sidebar_font)
         config(temp_button, "align", 0)
+        config(temp_button, "border_painted", false)
         set(sidebar_font, 2, original_size)
-
+        
         set(dashboard_components, 0, push(dashboard_components[0], temp_button))
         set(dashboard_components[1], 0, index)
         event(last(dashboard_components[0]), dashboard_list[e])
-        grid_add(dashboard_menu, last(dashboard_components[0]), 1, index + 1, 1, 1, 4, 0, 3, 1, 0, 0, 2, 0)
+        grid_add(dashboard_menu, last(dashboard_components[0]), 1, index + 1, 1, 1, 4, 0, 3, 1)
+
+        var panel_temp = component("panel", "")
+        d_grid(panel_temp)
+        set(dashboard_components, 0, push(dashboard_components[0], panel_temp))
+        event(last(dashboard_components[0]), dashboard_list[e])
+        grid_add(dashboard_menu, last(dashboard_components[0]), 0, index + 1, 1, 1, 1, 0, 3, 0)
+
     })
     var app_label = component("label", app_name)
     config(app_label, "font", ["Montserrat", 1, 33 + adjusted_size])
@@ -132,11 +150,18 @@ var minimize_sidebar = fn(){
     var adjusted_size = get_font_adjustment()
     set(sidebar_font, 2, sidebar_font[2] + adjusted_size)
     config(temp_button, "font", sidebar_font)
+    config(temp_button, "border_painted", false)
     set(sidebar_font, 2, original_size)
 
     set(dashboard_components, 0, push(dashboard_components[0], temp_button))
     event(last(dashboard_components[0]), maximize_sidebar)
     grid_add(dashboard_menu, last(dashboard_components[0]), 1, 0, 1, 1, 2, 0, 3, 1, 0, 0, 0, 0)
+
+    var panel_temp = component("panel", "")
+    d_grid(panel_temp)
+    set(dashboard_components, 0, push(dashboard_components[0], panel_temp))
+    event(last(dashboard_components[0]), maximize_sidebar)
+    grid_add(dashboard_menu, last(dashboard_components[0]), 0, 0, 1, 1, 1, 0, 3, 0)
 
     var filler_panel = get_filler("dark")
     var curr_index = dashboard_components[1][0]
