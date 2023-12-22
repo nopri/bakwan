@@ -16,6 +16,7 @@ load_file_or_resource("ui.singkong")
 load_file_or_resource("setup.singkong")
 load_file_or_resource("message.singkong")
 load_file_or_resource("config.singkong")
+load_file_or_resource("about.singkong")
 
 var app_name = "Bakwan"
 
@@ -74,9 +75,11 @@ var app_menu = fn(ctx) {
                     _("menu_about"), 
                     _m("menu_about"), 
                     true,
-                    fn() {
-                        message("")
-                    }  
+                    fn(){
+                        custom_dialog(call_about(), _("title_about"), 
+                        ctx["dialog_width"] *3, ctx["dialog_height"] *2, 
+                        true, r)
+                    }
                 ]
             ]
         ]

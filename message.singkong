@@ -26,6 +26,7 @@ var msg = {
     "title_account_delete": "Delete account",
     "title_db_config": "Database configuration",
     "title_login": "Login",
+    "title_about": "About",
     "confirm_quit": "Are you sure you want to quit this application?",
     "confirm_account_delete": "Are you sure you want to delete the following account?",
     "label_company": "Company name",
