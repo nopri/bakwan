@@ -74,11 +74,8 @@ var app_menu = fn(ctx) {
                 [
                     _("menu_about"), 
                     _m("menu_about"), 
-                    true,
-                    fn(){
-                        custom_dialog(call_about(), _("title_about"), 
-                        ctx["dialog_width"] *3, ctx["dialog_height"] *2, 
-                        true, r)
+                    true, fn(){
+                        about_form(ctx)
                     }
                 ]
             ]

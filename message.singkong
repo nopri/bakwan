@@ -73,6 +73,7 @@ var msg = {
     "_account_type": "account type",
     "_username": "username",
     "_password": "password",
+    "_made_with" : "Made with the programming language Singkong"
 }
 
 var mnemonic = {
