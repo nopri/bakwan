@@ -16,6 +16,7 @@ var font_size_manual = fn(comp, size){
 var about_form = fn(ctx){
     var about_grid = component("grid", "")
     var path_to_conf = variables()["CONF_PATH"][1]
+    var path_to_user_db = userhome() + separator() + ctx["db_name"]
     var about_title = component("label", _("title_about"), true)
     font_size_manual(about_title, 30)
     config(about_title, "align",  1)
@@ -36,8 +37,7 @@ var about_form = fn(ctx){
 
     var tech_string = [
         ["Config file", path_to_conf],    
-        ["User Database",  "C:\Users\(Username)\Bakwan as folder "],
-        ["Embedded Database", "Find folder with database name in home directory of app "] 
+        ["User Database",  path_to_user_db]
     ]
 
     var general_about = component("edit", general_string, true)
