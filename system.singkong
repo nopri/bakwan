@@ -224,14 +224,14 @@ var system_upgrade_db = fn(ctx) {
     }
     var dt = ctx["db_type"]
 
-    var latest = 4
+    var latest = 5
     var res = []
     var r = repeat {
         var v = system_db_get_version(ctx)
         if (v == latest) {
             return false
         }
-        if(v == null){
+        if (v == null) {
             return null
         }
         if (v == 1) {
@@ -325,7 +325,30 @@ var system_upgrade_db = fn(ctx) {
             if (r == null) {
                 return null
             }
+        }
 
+        if (v == 4) {
+            var a = db_select_all(db, "account_coa")
+            if (a == null) {
+                return null
+            }
+            if (empty(a[0])) {
+                each(accounts_template, fn(e, i) {
+                    var d = {
+                        "account_type": ac_types_code[e[0]],
+                        "code": e[1],
+                        "description": e[2]
+                    }
+                    db_insert(db, "account_coa", d)
+                })
+            }
+            var a = db_select_all(db, "account_coa")
+            if (a == null) {
+                return null
+            }
+            if (empty(a[0])) {
+                return null
+            }
         }
 
         var cv = v + 1
