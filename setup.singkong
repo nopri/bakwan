@@ -29,9 +29,62 @@ var default_fiscal_end = fn() {
 }
 
 var load_coa = fn(ctx, tbl) {
-    if (is_new()) {
-        config(tbl, "contents", accounts_template)
+    var db = ctx["db"]
+    if (db == null) {
+        message(_("error_db_connect"), _("title_error"))
+        return null
     }
+    var dt = ctx["db_type"]
+
+    var r = null
+    var d = []
+    if (in(db_types_derby, dt)) {
+        var r = db_select_derby(db, "account_coa", ["account_coa_id", "account_type", "code", "description"], [], ["account_type asc", "code asc"], null, null)
+    }
+    if (dt == db_types_pg) {
+        var r = db_select_postgresql(db, "account_coa", ["account_coa_id", "account_type", "code", "description"], [], ["account_type asc", "code asc"], null, null)
+    }
+    if (r != null) {
+        var d = r[0]
+        each(d, fn(e, i) {
+            set(e, 1, ac_types_code_r[e[1]])
+        })
+    }
+
+    config(tbl, "contents", d)
+}
+
+var create_coa = fn(ctx, h) {
+    var db = ctx["db"]
+    if (db == null) {
+        message(_("error_db_connect"), _("title_error"))
+        return null
+    }
+
+    var r = db_insert(db, "account_coa", h)
+    return r
+}
+
+var delete_coa = fn(ctx, h) {
+    var db = ctx["db"]
+    if (db == null) {
+        message(_("error_db_connect"), _("title_error"))
+        return null
+    }
+
+    var r = db_delete(db, "account_coa", h)
+    return r
+}
+
+var update_coa = fn(ctx, h1, h2) {
+    var db = ctx["db"]
+    if (db == null) {
+        message(_("error_db_connect"), _("title_error"))
+        return null
+    }
+
+    var r = db_update(db, "account_coa", h1, h2)
+    return r
 }
 
 var set_account_code = fn(cmb, msk) {
@@ -112,7 +165,8 @@ var setup_form = fn(ctx) {
     grid_add(gf, de[0], 3, 1, 1, 1, 0.9, 1, 1, 1)
 
     var tbl_coa = component("table", _("table_coa"), true)
-    table_center(tbl_coa, 1)
+    table_right(tbl_coa, 0)
+    table_center(tbl_coa, 2)
     var gp = component("grid", "")
     var g_tbl = component("grid", "")
     var b_coa_n = c_btn_(_("cmd_new"), 1, _m("cmd_new"))
@@ -124,7 +178,7 @@ var setup_form = fn(ctx) {
     grid_add(g_tbl, b_coa_d, 0, 2, 1, 1, 1, 0, 1, 1)
     grid_add(g_tbl, g_btn, 0, 3, 1, 1, 1, 1, 1, 1)
     grid_add(gp, tbl_coa, 0, 0, 1, 1, 1, 1, 3, 1)
-    grid_add(gp, g_tbl,   1, 0, 1, 1, 0, 1, 2, 1)
+    grid_add(gp, g_tbl,   1, 0, 1, 1, 0, 1, 2, 1)
 
     grid_add(g, tc[0], 0, 0, 4, 1, 1, 0, 1, 1)
     grid_add(g, gf, 0, 1, 4, 1, 1, 0, 1, 1)
@@ -147,7 +201,17 @@ var setup_form = fn(ctx) {
             if (!is_valid_account(a)) {
                 message(_("error_account_invalid"), _("title_error"))
             } else {
-                message(a)
+                var h = {
+                    "account_type": ac_types_code[a[0]],
+                    "code": a[1],
+                    "description": a[2]
+                }
+                if (create_coa(ctx, h) == null) {
+                    message(_("error_account_create"), _("title_error"))
+                } else {
+                    message(_("success_account_create"), _("title_info"))
+                }
+                load_coa(ctx, tbl_coa)
             }
         }
     })
@@ -159,23 +223,38 @@ var setup_form = fn(ctx) {
             return a
         }
         var edit = {
-            "_account_type": table_get_value(tbl_coa, a, 0),
-            "_code": table_get_value(tbl_coa, a, 1),
-            "_description": table_get_value(tbl_coa, a, 2)
+            "_account_type": table_get_value(tbl_coa, a, 1),
+            "_code": table_get_value(tbl_coa, a, 2),
+            "_description": table_get_value(tbl_coa, a, 3)
         }
         var d = account_dialog(ctx, edit)
         var r = panel_dialog(d[0], _("title_account_edit"), 
             ctx["dialog_width"], ctx["dialog_height"])
         if (r == "OK") {
-            var a = [
+            var aa = [
                 get(d[1], "text"),
                 get(d[2], "contents"),
                 get(d[3], "contents")
             ]
-            if (!is_valid_account(a)) {
+            if (!is_valid_account(aa)) {
                 message(_("error_account_invalid"), _("title_error"))
             } else {
-                message(a)
+                var aid = number(table_get_value(tbl_coa, a, 0))
+                var h1 = [
+                    ["account_coa_id = ", aid, ""]
+                ]
+                var h2 = {
+                    "account_type": ac_types_code[aa[0]],
+                    "code": aa[1],
+                    "description": aa[2]
+                }
+                if (update_coa(ctx, h1, h2) == null) {
+                    message(_("error_account_update"), _("title_error"))
+                } else {
+                    message(_("success_account_update"), _("title_info"))
+                }
+                load_coa(ctx, tbl_coa)
+                config(tbl_coa, "active", a)
             }
         }
     })
@@ -187,14 +266,23 @@ var setup_form = fn(ctx) {
             return a
         }
         var del = {
-            "_account_type": table_get_value(tbl_coa, a, 0),
-            "_code": table_get_value(tbl_coa, a, 1),
-            "_description": table_get_value(tbl_coa, a, 2)
+            "_account_type": table_get_value(tbl_coa, a, 1),
+            "_code": table_get_value(tbl_coa, a, 2),
+            "_description": table_get_value(tbl_coa, a, 3)
         }
         var detail = account_details(del)
         var r = confirm(_("confirm_account_delete") + lf() + detail, _("title_confirm"))
         if (r == "OK") {
-            message(del)
+            var aid = number(table_get_value(tbl_coa, a, 0))
+            var h = [
+                ["account_coa_id = ", aid, ""]
+            ]
+            if (delete_coa(ctx, h) == null) {
+                message(_("error_account_delete"), _("title_error"))
+            } else {
+                message(_("success_account_delete"), _("title_info"))
+            }
+            load_coa(ctx, tbl_coa)
         }
     })
 

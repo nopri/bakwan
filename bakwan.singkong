@@ -8,7 +8,7 @@
     Budiman (Budyzhang778@gmail.com)
 ;
 
-require(8.6)
+require(8.7)
 
 load_file_or_resource("account.singkong")
 load_file_or_resource("system.singkong")
@@ -21,28 +21,89 @@ var app_name = "Bakwan"
 
 reset()
 title(app_name)
-closing(_("confirm_quit"), _("title_confirm"))
+var s = screen()
+size(s[0] * 0.9, s[1] * 0.9)
 show()
 
 var frame_info = frame()
 var ctx = {
     "name": app_name,
+
+    "db": null,
+    "db_type": "",
+    "db_host": "",
+    "db_name": "",
+
     "user": null,
-    "group": null,
+    "user_id": null,
+    "group_id": null,
     "permission": null
 ,
     "dialog_width": 400,
     "dialog_height": 240,
-    "dialog_width_2": frame_info[0] * 0.9,
-    "dialog_height_2": frame_info[1] * 0.9,
+    "dialog_width_2": frame_info[0] * 0.8,
+    "dialog_height_2": frame_info[1] * 0.8,    
 }
 
-var conf = read_config()
+var app_menu = fn(ctx) { 
+    return [
+        [_("menu_file"), _m("menu_file"), 
+            [
+                [
+                    _("menu_settings"),
+                    _m("menu_settings"), 
+                    true,
+                    fn() {
+                        var r = setup_form(ctx)
+                    }  
+                ],
+                [],
+                [
+                    _("menu_quit"),
+                    _m("menu_quit"),
+                    true,
+                    fn() {
+                        frame_close()
+                    }
+                ]
+            ]
+        ],
+        [_("menu_help"), _m("menu_help"),
+            [ 
+                [
+                    _("menu_about"), 
+                    _m("menu_about"), 
+                    true,
+                    fn() {
+                        message("")
+                    }  
+                ]
+            ]
+        ]
+    ]
+}
+
+var init_ui = fn(ctx) {
+    closing(_("confirm_quit"), _("title_confirm"))
+
+    var status_db = upper(_("_db_connected"), true) + " " + 
+        "(" + ctx["db_type"] + ")"
+    statusbar(0, status_db, true)
+    statusbar(1, ctx["db_name"], true)
+    statusbar(2, ctx["user"], true)
+    timer(1000, fn() {
+        statusbar(3, string(@), true)
+    })
+
+    menubar(app_menu(ctx))
+}
+
+var conf = read_config(ctx)
 var conf_status = repeat {
     if (empty(conf)) {
         var r = config_form(ctx)
         if (r["config"] == true | r["command"] == "close") {
-            var conf = read_config()
+            var conf = read_config(ctx)
             return r
         }
     } else {
@@ -50,9 +111,91 @@ var conf_status = repeat {
     }
 }
 
-if (is_new() & (!empty(conf))) {
-    var r = setup_form(ctx)
-}else{
+if (empty(conf)) {
     frame_close()
-}
+} else {
+    var db = get_db(ctx)
+    if (db == null) {
+        var n = join(lf(), get_db_info(ctx, false))
+        var m = _("error_db_connect") + lf() + n + lf() + _("confirm_config_reset")
+        var r = confirm(m, _("title_confirm"))
+        if (r == "OK") {
+            if (properties_write(conf_path, {})) {
+                message(_("info_app_restart"), _("title_info"))
+            } else {
+                message(_("error_config_write"), _("title_error"))
+            }
+        }
+        frame_close()
+    } else {
+        set(ctx, "db", db)
+        set(ctx, "db_type", conf["db_type"])
+        set(ctx, "db_host", conf["db_host"])
+        set(ctx, "db_name", conf["db_name"])
 
+        if (is_new(ctx)) {
+            var r = system_init_db(ctx)
+            if (r == null) {
+                message(_("error_db_init"), _("title_error"))
+                frame_close()
+            } else {
+                message(
+                    _("success_db_init") + lf() +
+                    _("info_app_user") + ": " + lf() +
+                    upper(_("_username"), true) + ": " + 
+                    db_system_default_user + lf() +
+                    upper(_("_password"), true) + ": " + 
+                    db_system_default_password + lf(),
+                    _("title_info")
+                )
+            }
+        }
+
+        var r_upg = system_upgrade_db(ctx)
+        if (r_upg == null) {
+            message(_("error_db_upgrade"), _("title_error"))
+            frame_close()
+        } else {
+            if (r_upg == true) {
+                message(
+                    _("success_db_upgrade"),
+                    _("title_info")
+                )
+            }
+        }
+
+        var r_auth = repeat {
+            if (r_upg == null) {
+                return []
+            }
+            var r = login_dialog(
+                _("title_login"),
+                upper(_("_username"), true),
+                upper(_("_password"), true)
+            )
+            if (len(r) > 1) {
+                var u = r[0]
+                var p = r[1]
+                var r_auth = system_auth(ctx, u, p)
+                if (len(r_auth) == 3) {
+                    return r_auth
+                } else {
+                    message(
+                        _("error_auth"),
+                        _("title_info")
+                    )
+                }
+            } else {
+                return []
+            }
+        }
+        if (len(r_auth) == 3) {
+            set(ctx, "user_id", r_auth[0])
+            set(ctx, "group_id", r_auth[1])
+            set(ctx, "user", r_auth[2])
+            init_ui(ctx)
+        } else {
+            frame_close()
+        }
+    }
+}

@@ -32,15 +32,23 @@ var ac_types_code = {
     ac_type_income: 4,
     ac_type_expense: 5,
 }
+var ac_types_code_r = {
+    1: ac_type_asset,
+    2: ac_type_liability,
+    3: ac_type_equity,
+    4: ac_type_income,
+    5: ac_type_expense,
+}
 
 var accounts_template = [
     [ac_type_asset, "110", "Cash"],
     [ac_type_asset, "120", "Accounts Receivable"],
     [ac_type_asset, "130", "Inventory"],
     [ac_type_liability, "210", "Accounts Payable"],
-    [ac_type_equity, "310", "Owners' Equity"],
+    [ac_type_equity, "310", "Owner's Equity"],
     [ac_type_income, "410", "Revenue"],
-    [ac_type_expense, "510", "Utilities"]
+    [ac_type_expense, "510", "Utilities"],
+    [ac_type_expense, "520", "Cost of Goods Sold"]
 ]
 
 var is_valid_account_type = fn(t) {

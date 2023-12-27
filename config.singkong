@@ -12,14 +12,6 @@
 
 load_module("db_util")
 
-var config_db_types = [
-    "User",
-    "Embedded",
-    "Network",
-    "PostgreSQL"
-]
-var config_db_types_ = join(",", config_db_types)
-
 var set_db_conn_param = fn(t, h, u, p, n) {
     var dt = get(t, "text")
     c_enable_text(h)
@@ -51,25 +43,8 @@ var test_db_conn = fn(ctx, t, h, u, p, n) {
     var du = get(u, "contents")
     var dp = get(p, "contents")
     var dn = get(n, "contents")
-    var n = ctx["name"]
-    if (n == null) {
-        return n
-    }
 
-    var c = "//" + dh + "/" + dn
-    if (dt == "User") {
-        return db_connect_embed_user(n)
-    } 
-    if (dt == "Embedded") {
-        return db_connect_embed(dn)
-    }
-    if (dt == "Network") {
-        return db_connect("derby", c, du, dp)
-    }
-    if (dt == "PostgreSQL") {
-        return db_connect("postgresql", c, du, dp)
-    }
-    return null
+    return connect_db(ctx, dt, dh, du, dp, dn)
 }
 
 var config_form = fn(ctx) {
@@ -80,15 +55,15 @@ var config_form = fn(ctx) {
 
     var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
     var btn_connect = c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
-    var btn_close = c_btn_(_("cmd_close"), 5, _m("cmd_close"))
+    var btn_quit = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
 
     var g_btn = component("grid", "")
     grid_add(g_btn, btn_connect, 0, 0, 1, 1, 1, 0, 0, 1)
-    grid_add(g_btn, btn_close, 1, 0, 1, 1, 1, 0, 0, 2)
+    grid_add(g_btn, btn_quit, 1, 0, 1, 1, 1, 0, 0, 2)
     grid_add(g_btn, btn_save, 2, 0, 1, 1, 0, 0, 0, 2)
 
     var lbl_type = component("label", _("label_db_type"))
-    var cmb_type = component("combobox", config_db_types_)
+    var cmb_type = component("combobox", db_types_)
     var lbl_host = component("label", _("label_db_host"))
     var txt_host = component("text", "")
     var lbl_user = component("label", _("label_db_user"))
@@ -123,7 +98,7 @@ var config_form = fn(ctx) {
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else {
-            message(_("msg_db_connected"), _("title_info"))
+            message(_("success_db_connected"), _("title_info"))
         }
     })
 
@@ -151,16 +126,16 @@ var config_form = fn(ctx) {
             }
 
             if(properties_write(conf_path, config_hash)){
-                message(_("success_write_file"), _("title_info"))
+                message(_("success_config_write"), _("title_info"))
                 set(ret, "config", true)
+                custom_dialog_close(last(r))
             }else{
-                message(_("error_write_file"), _("title_error"))
+                message(_("error_config_write"), _("title_error"))
             }
         }
-        custom_dialog_close(last(r))
     })
 
-    event(btn_close, fn() {
+    event(btn_quit, fn() {
         set(ret, "command", "close")
         custom_dialog_close(last(r))
     })
