@@ -63,11 +63,43 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
   - Pembuatan test database connection yang sudah bekerja.
 
 - Update 1.9 (27 November 2023)
+
   - Menggunakan Singkong Versi 8.6.
   - Membuat repeat yang akan bekerja ketika konfigurasi database belum ada, karena aplikasi tidak dapat digunakan apabila belum konfigurasi ke database.
   - Aplikasi akan keluar dari repeat apabila sudah ditutup dengan tombol save ataupun konfigurasi sudah tersedia.
   - Tidak add grid ke frame di setup.
   - Bug fix tidak bisa masuk ketika sudah keluar aplikasi.
+
+- Update 2.0 (03 Desember 2023)
+
+  - Penambahan credit pada aplikasi Bakwan.
+  - Tombol "close" pada pengaturan database diubah menjadi quit dan akan langsung menutup aplikasi tanpa meminta konfirmasi tambahan.
+  - Komfirmasi penutupan frame sekarang hanya ditampilkan jika koneksi ke database berhasil, dengan menggunakan parameter konfigurasi dari file konfigurasi.
+  - Jika terjadi kegagalan koneksi ke database, pengguna diberikan opsi untuk mereset konfigurasi. Contohnya jika parameter koneksi database tidak valid lagi, pengguna dapat memilih untuk tidak melakukannya, misalk=nya ketika database sedang offline.
+  - Penambahan status bar yang menampilkan informasi mengenai status database, tanggal, dan waktu.
+
+- Update 2.1 (05 Desember 2023)
+
+  - Database telah disiapkan (pembuatan tabel dan pemasukan data) untuk keperluan otentikasi
+  - Proses otentikasi telah berhasil untuk dilakukan.
+
+- Update 2.2 (11 Desember 2023)
+
+  - Menggunakan Singkong versi 8.7.
+  - Pembaruan otomatis pada database, contohnya menambahkan aturan keterkaitan antar tabel (foreign key).
+  - Penambahan menu bar.
+
+- Update 2.3 (14 Desember 2023)
+
+  - Perbaruan beberapa versi database aplikasi Bakwan.
+
+- Update 2.4 (18 Desember 2023)
+
+  - Perubahan nama table account pada database bakwan, karena account merupakan reserved atau key word pada salah satu sistem database.
+
+- Update 2.5 (20 Desember 2023)
+
+  - Database Bakwan sudah bisa menjalankan perintah "create", "update", dan "delete" chart of account.
 
 ## Panduan Penggunaan Aplikasi
 
