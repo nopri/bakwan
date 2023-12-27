@@ -5,7 +5,7 @@
     
     Authors:
     Noprianto (nop@noprianto.com)
-    Budiman
+    Budiman (Budyzhang778@gmail.com)
 ;
 
 var button_opt = {
@@ -14,7 +14,9 @@ var button_opt = {
     2: [-52429, -1],
     3: [-26368, -16777216],
     4: [-16777216, -1],
-    5: [-1, -16777216]
+    5: [-1, -16777216],
+    6: [-16635078, -1],
+    7: [-1, -16635078]
 }
 
 var c_btn_ = fn(a, t, m) {

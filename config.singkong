@@ -118,10 +118,10 @@ var config_form = fn(ctx) {
             var name_input = get(txt_name, "contents")
             
             var config_hash = {
+                "db": db,
                 "db_type": db_type_input,
                 "db_host": host_input,
                 "db_user": user_input,
-                "db_password": password_input,
                 "db_name": name_input
             }
 

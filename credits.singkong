@@ -1,0 +1,117 @@
+#
+    credit.singkong
+    Credit page utilities
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+    Budiman (Budyzhang778@gmail.com)
+;
+
+var conf_name = "bakwan.properties"
+var conf_path = userhome() + separator() + conf_name
+
+var conf_content = properties_read(conf_path)
+
+
+var small_font_size = 25
+var big_font_size = 40
+var title_font_size = 60
+var default_w = 1000
+var font_list = {
+    0: ["Rockwell", 0, small_font_size],
+    1: ["Times New Roman", 1, big_font_size],
+    2: ["Times New Roman", 3, title_font_size]
+}
+
+var return_adjusted_font = fn(w, font_choice){
+    var curr_font = font_list[font_choice];
+    if(curr_font == null){
+        var curr_font = font_list[0]
+    }
+    var original_size = curr_font[2] 
+    var adjusted_size = (w-default_w) * 0.01
+    set(curr_font, 2, curr_font[2] + adjusted_size)
+
+    var ret_font = curr_font
+    # Reset size to original;
+    set(curr_font, 2, original_size)
+
+    return ret_font
+} 
+
+var call_credits = fn(w, h){
+    # Add credit content from global variable;
+    var credit_content = variables()["AUTHORS_LIST"][1]
+
+    var d = [0, h/2, 2, 2]
+    var s = 30
+
+    var p = component("panel", "")
+
+    var credit_grid = component("grid", "")
+    d_grid(credit_grid)
+
+    # lines[1] act as index;
+    var lines = [[], 0]
+
+    each(keys(credit_content), fn(e, index) {
+        # Role loop;
+        var author_names = credit_content[e]
+        var header_font = return_adjusted_font(w, 1)
+        set(lines, 0, push(lines[0], component("label", e)))
+        config(lines[0][lines[1]], "font", header_font)
+
+        config(lines[0][lines[1]], "align", 1)
+        grid_add(credit_grid, lines[0][lines[1]], 0, lines[1], 1, 1, 0, 0, 2, 0)
+        
+        set(lines, 1, lines[1] + 1)
+        each(author_names, fn(sub_e, sub_index){
+            # Name loop;
+            var body_font = return_adjusted_font(w, 0)
+
+            set(lines, 0, push(lines[0], component("label", sub_e)))
+            config(lines[0][lines[1]], "font", body_font)
+            grid_add(credit_grid, lines[0][lines[1]], 0, lines[1], 1, 1, 0, 0, 2, 0, 9, 0, 0, 0)
+            
+            set(lines, 1, lines[1] + 1)
+        })
+
+    })
+
+    # Add grid first to panel before attempting to move it;
+    panel_add(p, credit_grid, 0, 0, w, h)
+    return [p, credit_grid, d]
+}
+
+
+var roll_credits = fn(p, grid, d){
+    var credit_timer = timer(30, fn() {
+        # Call frame to get new size if frame is resized during loop;
+        var panel_info = component_info(p)
+        if(panel_info == null){
+            stop_timer(credit_timer)
+        }else{
+            var w =  panel_info[4]
+            var h = panel_info[5]
+
+            var x = d[0]
+            var y = d[1]
+            var dx = d[2]
+            var dy = d[3]
+
+            if (y < -h) {
+                var y = h * 0.8
+            }
+            var y = y - dy
+
+            set(d, 1, y)
+            set(d, 2, dx)
+            set(d, 3, dy)
+            
+            panel_add(p, grid, x, y, w, h)
+        }
+
+    })
+}
+

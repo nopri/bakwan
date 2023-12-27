@@ -9,7 +9,6 @@
 ;
 
 load_module("db_util")
-
 var conf_name = "bakwan.properties"
 var conf_path = userhome() + separator() + conf_name
 
