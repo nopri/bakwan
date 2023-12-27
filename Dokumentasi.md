@@ -25,17 +25,17 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
 - Update 1.0 (30 Oktober 2023)
 
-  - Menggunakan Singkong Versi 8.3.
+  - Menggunakan **Singkong** Versi 8.3.
   - Dapat memasukkan Nama Perusahaan dan Tanggal Fiskal.
 
 - Update 1.2 (08 November 2023)
 
   - Penambahan fitur template sederhana untuk Chart Of Accounts dan Tabelnya.
-  - Menambahkan tombol new, edit, dan delete yang belum berfungsi.
+  - Menambahkan tombol "New", "Edit", dan "Delete" yang belum berfungsi.
 
 - Update 1.3 (11 November 2023)
 
-  - Menggunakan Singkong Versi 8.4.
+  - Menggunakan **Singkong** Versi 8.4.
   - Perubahan Syling pada datepicker agar lebih seragam dengan tombol lain.
   - Draft dialog new account pada Chart Of Account, yang didadalm akun tersebut terdapat tipe akun, kode akun, dan deskripsi.
 
@@ -43,16 +43,16 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
   - Penyesuaian nama Variabel untuk mnemonic
   - Usulan kode akun sesuai tipe akun baru
-  - Tombol Reset
+  - Tombol "Reset"
 
 - Update 1.5 (13 November 2023)
 
-  - Menggunakan Singkong Versi 8.5.
+  - Menggunakan **Singkong** Versi 8.5.
   - Alignment Kode akun sesuai tipe akun baru.
 
 - Update 1.6 (17 November 2023)
 
-  - Penambahan dialog pada tombol new, edit, dan delete pada tabel Chart of Account
+  - Penambahan dialog pada tombol "New", "Edit", dan "Delete" pada tabel Chart of Account
 
 - Update 1.7 (20 November 2023)
 
@@ -64,16 +64,16 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
 - Update 1.9 (27 November 2023)
 
-  - Menggunakan Singkong Versi 8.6.
+  - Menggunakan **Singkong** Versi 8.6.
   - Membuat repeat yang akan bekerja ketika konfigurasi database belum ada, karena aplikasi tidak dapat digunakan apabila belum konfigurasi ke database.
-  - Aplikasi akan keluar dari repeat apabila sudah ditutup dengan tombol save ataupun konfigurasi sudah tersedia.
+  - Aplikasi akan keluar dari repeat apabila sudah ditutup dengan tombol "Save" ataupun konfigurasi sudah tersedia.
   - Tidak add grid ke frame di setup.
   - Bug fix tidak bisa masuk ketika sudah keluar aplikasi.
 
 - Update 2.0 (03 Desember 2023)
 
   - Penambahan credit pada aplikasi Bakwan.
-  - Tombol "close" pada pengaturan database diubah menjadi quit dan akan langsung menutup aplikasi tanpa meminta konfirmasi tambahan.
+  - Tombol "close" pada pengaturan database diubah menjadi "Quit" dan akan langsung menutup aplikasi tanpa meminta konfirmasi tambahan.
   - Komfirmasi penutupan frame sekarang hanya ditampilkan jika koneksi ke database berhasil, dengan menggunakan parameter konfigurasi dari file konfigurasi.
   - Jika terjadi kegagalan koneksi ke database, pengguna diberikan opsi untuk mereset konfigurasi. Contohnya jika parameter koneksi database tidak valid lagi, pengguna dapat memilih untuk tidak melakukannya, misalk=nya ketika database sedang offline.
   - Penambahan status bar yang menampilkan informasi mengenai status database, tanggal, dan waktu.
@@ -85,7 +85,7 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
 - Update 2.2 (11 Desember 2023)
 
-  - Menggunakan Singkong versi 8.7.
+  - Menggunakan **Singkong** versi 8.7.
   - Pembaruan otomatis pada database, contohnya menambahkan aturan keterkaitan antar tabel (foreign key).
   - Penambahan menu bar.
 
@@ -99,7 +99,7 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
 - Update 2.5 (20 Desember 2023)
 
-  - Database Bakwan sudah bisa menjalankan perintah "create", "update", dan "delete" chart of account.
+  - Database Bakwan sudah bisa menjalankan perintah "Create", "Update", dan "Delete" Chart of Account.
 
 ## Panduan Penggunaan Aplikasi
 
@@ -107,16 +107,33 @@ Dalam _double-entry bookkeeping_, setiap transaksi akan dicatat dalam dua akun, 
 
 2. Pengguna dapat mengunduh bahasa pemrograman [**Singkong**](https://nopri.github.io/Singkong.jar) versi terbaru dan aplikasi [**Bakwan**](https://github.com/nopri/bakwan) di tautan yang tersedia.
 
-3. Buka file main.singkong yang sudah diunduh dari https://github.com/nopri/bakwan. Lalu jalankan file tersebut.
-4. Pengguna akan disajikan tampilan Account Setup dimana pengguna dapat mengisi nama perusahaan, menentukan tahun fiskal, dan menambahkan, menyunting, atau menghapus akun-akun.
+3. Buka **Singkong.jar** yang telah diundur dari https://nopri.github.io/Singkong.jar.
 
-5. Dalam tabel Chart Of Account akan terdapat Type, Code, dan Description. Dalam tabel tersebut pengguna dapat:
+4. Buka file **main.singkong** yang sudah diunduh dari https://github.com/nopri/bakwan. Lalu jalankan file tersebut.
 
-   - menambahkan akun dengan tombol **New** dimana akan diminta mengisi Account Type, Code, dan Description.
-   - Untuk menyunting akun, pengguna harus memilih baris yang diinginkan dan memilih tombol **Edit** yang akan mengubah bagian yang diinginkan dari ketiga hal tersebut.
-   - Untuk menghapus salah satu akun, pengguna perlu memilih baris yang diinginkan sebelum menggunakan **Delete**.
+5. Pengguna akan diberikan pesan bahwa database sudah berhasil diinisialisasi dan diberikan **username** serta **password default**. Pengguna juga akan diberikkan pesan bahwa database berhasil diperbarui sebelum kemudian diminta untuk memasukkan username dan password.
 
-6. Jika sudah selesai, pengguna bisa menekan tombol Save.
+6. Pengguna memasukkan **username** dan **password** default yang telah diberikan sebelumnya.
+
+7. Pengguna akan disajikan dua menu yaitu "**File**" dan "**Help**" :
+
+   - Apabila pengguna memilih "**File**", maka user akan ditampilkan pilihan lain yaitu "**Setting**" dan "**Quit**".
+
+     - Ketika pengguna memilih "**Setting**", maka pengguna akan disajikan tampilan "**Account Setup**" yang dimana pengguna dapat mengisi nama perusahaan, menentukan tahun fiskal, dan melakukan perubahan(menambahkan, menyunting, atau merubah) pada akun-akun.
+
+     - Ketika pengguna memilih "**Quit**" maka pengguna akan dikeluarkan dari aplikasi Bakwan.
+
+   - Apabila pengguna memilih "**Help**" maka pengguna akan ditampilkan pilihan "**About**".
+
+8. Dalam tabel Chart Of Account akan terdapat ID, Type, Code, dan Description. Dalam tabel tersebut pengguna dapat:
+
+   - menambahkan akun dengan tombol "**New**" dimana akan diminta mengisi Account Type, Code, dan Description.
+   - Untuk menyunting akun, pengguna harus memilih baris yang diinginkan dan memilih tombol "**Edit**" yang akan mengubah bagian yang diinginkan dari ketiga hal tersebut.
+   - Untuk menghapus salah satu akun, pengguna perlu memilih baris yang diinginkan sebelum menggunakan "**Delete**" lalu pengguna akan diminta konfirmasi kembali sebelum menghapus.
+
+9. Jika sudah selesai, pengguna bisa menekan tombol "**Save**".
+
+10. Jika sudah selesai menggunakan aplikasi, pengguna bisa menekan tombol "**Quit**" di menu "**File**"
 
 ## Referensi
 
