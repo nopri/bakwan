@@ -108,11 +108,11 @@ In double-entry bookkeeping, each transaction is recorded in two accounts, namel
 
    - If the user chooses "**File**," additional options will be displayed, namely "**Setting**" and "**Quit**."
 
-     - When the user selects "**Setting**," they will be presented with the "**Account Setup**" view, where the user can input the company name, determine the fiscal year, and make changes (add, edit, or modify) to the accounts.
+     - When the user selects "**Setting**", they will be presented with the "**Account Setup**" view, where the user can input the company name, determine the fiscal year, and make changes (add, edit, or modify) to the accounts.
 
-     - When the user selects "**Quit**," they will exit the Bakwan application.
+     - When the user selects "**Quit**", they will exit the Bakwan application.
 
-   - If the user chooses "**Help**," they will be presented with the "**About**" option.
+   - If the user chooses "**Help**", they will be presented with the "**About**" option.
   
 8. In the Chart Of Account table, there will be ID, Type, Code, and Description. In this table, the user can:
 
