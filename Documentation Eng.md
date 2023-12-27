@@ -41,30 +41,54 @@ In double-entry bookkeeping, each transaction is recorded in two accounts, namel
     - Styling changes on the date picker for uniformity with other buttons.
     - Draft dialog for new account in the Chart Of Account, containing account type, account code, and description.
 
-- Versi 1.4 (12 November 2023)
+- Version 1.4 (12 November 2023)
     - Adjustment of variable names for mnemonics.
     - Proposed account code according to the new account type.
     - Reset button.
 
-- Versi 1.5 (13 November 2023)
+- Version 1.5 (13 November 2023)
     - Uses Singkong Version 8.5.
     - Alignment of account codes in the New Account dialog.
 
-- Versi 1.6 (17 November 2023)
+- Version 1.6 (17 November 2023)
     - Addition of a dialog on the new, edit, and delete buttons on the Chart Of Account table.
 
-- Versi 1.7 (20 November 2023)
+- Version 1.7 (20 November 2023)
     - Creation of a user interface for preparing the database connection.
 
-- Versi 1.8 (21 November 2023)
+- Version 1.8 (21 November 2023)
     - Creation of a test database connection that is functional.
 
-- Versi 1.9 (27 November 2023)
+- Version 1.9 (27 November 2023)
     - Uses Singkong Version 8.6.
     - Created a loop that will work when the database configuration is not available because the application cannot be used without a database configuration.
-    - The application will exit the loop if closed with the save button or if the configuration is already available
+    - The application will exit the loop if closed with the save button or if the configuration is already available.
     - No grid added to the frame in setup.
     - Bug fix for fixing when you exit the app and can not login.
+
+- Version 2.0 (December 3, 2023)
+    - Addition of credits to the Bakwan application.
+    - The 'Close' button in the database settings has been changed to 'Quit' and will now immediately close the application without requesting additional confirmation.
+    - The frame closure confirmation is now only displayed if the connection to the database is successful, using configuration parameters from the configuration file.
+    - Addition of a status bar displaying information about the database status, date, and time.
+
+- Version 2.1 (December 5, 2023)
+    - Database has been prepared (table creation and data entry) for authentication purposes.
+    - Authentication process has been successfully implemented.
+
+- Version 2.2 (December 11, 2023)
+    - Uses Singkong Version 8.7.
+    - Automatic updates on the database, such as adding rules of association between tables (foreign key).
+    - Addition of a menu bar.
+ 
+- Version 2.3 (December 14, 2023)
+    - Update of several database versions for the Bakwan application.
+
+ - Version 2.4 (December 18, 2023)
+    - Change in the name of the account table in the Bakwan database, as account is a reserved keyword in one of the database systems.
+
+ - Version 2.5 (December 20, 2023)
+    - Bakwan Database can now execute 'Create,' 'Update,' and 'Delete' commands for Chart of Accounts.
 
 
 ## Application User Guide
