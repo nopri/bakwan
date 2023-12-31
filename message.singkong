@@ -49,6 +49,7 @@ var msg = {
     "error_account_update": "Error updating account",
     "error_account_delete": "Error deleting account",
     "table_coa": "ID,Type,Code,Description",
+    "table_about": "Property,Value",
     "success_db_connected": "Successfully connected to database",
     "success_config_write": "Successfully updated configuration",
     "success_db_init": "Successfully initialized database", 
@@ -73,7 +74,13 @@ var msg = {
     "_account_type": "account type",
     "_username": "username",
     "_password": "password",
-    "_made_with" : "Made with the programming language Singkong"
+    "_config_file": "Configuration file",
+    "_created_with" : "Created with the Singkong programming language",
+    "_authors": "Authors:",
+    "about_general_string": "
+        Bakwan: simple accounting software
+
+    "
 }
 
 var mnemonic = {

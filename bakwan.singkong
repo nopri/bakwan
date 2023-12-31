@@ -29,6 +29,10 @@ show()
 var frame_info = frame()
 var ctx = {
     "name": app_name,
+    "authors": [
+        ["Noprianto", "nop@noprianto.com"],
+        ["Budiman", "Budyzhang778@gmail.com"]
+    ],
 
     "db": null,
     "db_type": "",
