@@ -1,0 +1,58 @@
+#
+    about.singkong
+    
+    part of Bakwan: Information about the application
+    
+    Authors:
+    Budiman (Budyzhang778@gmail.com)
+;
+
+var font_size_manual = fn(comp, size){
+    var comp_font = get(comp, "font")
+    set(comp_font, 2, size)
+    config(comp, "font", comp_font)
+}
+
+var about_form = fn(ctx){
+    var about_grid = component("grid", "")
+    var path_to_conf = variables()["CONF_PATH"][1]
+    var path_to_user_db = userhome() + separator() + ctx["db_name"]
+    var about_title = component("label", _("title_about"), true)
+    font_size_manual(about_title, 30)
+    config(about_title, "align",  1)
+
+    var general_string = "
+        Bakwan is an accounting program.  
+
+        Documentation can be found in the link below:
+        (Insert link here)
+    "
+
+    var authors_string = "
+        Author(s):
+            Noprianto (nop@noprianto.com)
+            Budiman (Budyzhang778@gmail.com)
+
+    "
+
+    var tech_string = [
+        ["Config file", path_to_conf],    
+        ["User Database",  path_to_user_db]
+    ]
+
+    var general_about = component("edit", general_string, true)
+    var authors_about = component("edit", authors_string, true)
+    var tech_about = component("table", "Property, Value", true)
+
+    font_size_manual(general_about, 16)
+    font_size_manual(authors_about, 16)
+    config(tech_about, "contents", tech_string)
+    grid_add(about_grid, about_title, 0,0, 2,1, 1,0, 1,0)
+    grid_add(about_grid, general_about, 0,1, 1,1, 1,1, 3,0)
+    grid_add(about_grid, authors_about, 0,2, 1,1, 1,1, 3,0)
+    grid_add(about_grid, tech_about, 1,1, 1,2, 1,1, 3,0)
+
+    custom_dialog(about_grid, _("title_about"), 
+    ctx["dialog_width_2"], ctx["dialog_height_2"], 
+    true, r)
+}
