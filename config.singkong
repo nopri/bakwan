@@ -12,24 +12,24 @@
 
 load_module("db_util")
 
-var set_db_conn_param = fn(t, h, u, p, n) {
+var _set_db_conn_param = fn(t, h, u, p, n) {
     var dt = get(t, "text")
-    c_enable_text(h)
-    c_enable_text(u)
-    c_enable_text(p)
-    c_enable_text(n)
+    ui_c_enable_text(h)
+    ui_c_enable_text(u)
+    ui_c_enable_text(p)
+    ui_c_enable_text(n)
 
     if (dt == "User") {
-        c_disable_text(h)
-        c_disable_text(u)
-        c_disable_text(p)
-        c_disable_text(n)
+        ui_c_disable_text(h)
+        ui_c_disable_text(u)
+        ui_c_disable_text(p)
+        ui_c_disable_text(n)
         return dt
     } 
     if (dt == "Embedded") {
-        c_disable_text(h)
-        c_disable_text(u)
-        c_disable_text(p)
+        ui_c_disable_text(h)
+        ui_c_disable_text(u)
+        ui_c_disable_text(p)
         config(n, "focus", true) 
         return dt
     }
@@ -37,14 +37,14 @@ var set_db_conn_param = fn(t, h, u, p, n) {
     return dt
 }
 
-var test_db_conn = fn(ctx, t, h, u, p, n) {
+var _test_db_conn = fn(ctx, t, h, u, p, n) {
     var dt = get(t, "text")
     var dh = get(h, "contents")
     var du = get(u, "contents")
     var dp = get(p, "contents")
     var dn = get(n, "contents")
 
-    return connect_db(ctx, dt, dh, du, dp, dn)
+    return system_connect_db(ctx, dt, dh, du, dp, dn)
 }
 
 var config_form = fn(ctx) {
@@ -53,9 +53,9 @@ var config_form = fn(ctx) {
 
     var g = component("grid", "")
 
-    var btn_save = c_btn_(_("cmd_save"), 0, _m("cmd_save"))
-    var btn_connect = c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
-    var btn_quit = c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
+    var btn_save = ui_c_btn_(_("cmd_save"), 0, _m("cmd_save"))
+    var btn_connect = ui_c_btn_(_("cmd_test_connect"), 1, _m("cmd_test_connect"))
+    var btn_quit = ui_c_btn_(_("cmd_quit"), 5, _m("cmd_quit"))
 
     var g_btn = component("grid", "")
     grid_add(g_btn, btn_connect, 0, 0, 1, 1, 1, 0, 0, 1)
@@ -63,7 +63,7 @@ var config_form = fn(ctx) {
     grid_add(g_btn, btn_save, 2, 0, 1, 1, 0, 0, 0, 2)
 
     var lbl_type = component("label", _("label_db_type"))
-    var cmb_type = component("combobox", db_types_)
+    var cmb_type = component("combobox", system_db_types_)
     var lbl_host = component("label", _("label_db_host"))
     var txt_host = component("text", "")
     var lbl_user = component("label", _("label_db_user"))
@@ -88,13 +88,13 @@ var config_form = fn(ctx) {
     grid_add(g, gp, 0, 5, 2, 1, 1, 1, 3, 0)
     grid_add(g, g_btn, 0, 6, 3, 1, 1, 0, 3, 0)
 
-    set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
+    _set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
     event(cmb_type, fn() {
-        set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
+        _set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
     })
 
     event(btn_connect, fn() {
-        var db = test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = _test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else {
@@ -107,7 +107,7 @@ var config_form = fn(ctx) {
         set(ret, "config", false) # Set default value of config as false and set true when file save success;
 
         # Test DB connection, return null if invalid connection;
-        var db = test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = _test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else{
@@ -125,7 +125,7 @@ var config_form = fn(ctx) {
                 "db_name": name_input
             }
 
-            if(properties_write(conf_path, config_hash)){
+            if(properties_write(ctx["conf_path"], config_hash)){
                 message(_("success_config_write"), _("title_info"))
                 set(ret, "config", true)
                 custom_dialog_close(last(r))

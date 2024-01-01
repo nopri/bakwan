@@ -8,7 +8,7 @@
     Budiman (budyzhang778@gmail.com)
 ;
 
-var msg = {
+var _msg = {
     "cmd_save": "Save",
     "cmd_quit": "Quit",
     "cmd_new": "New",
@@ -83,7 +83,7 @@ var msg = {
     "
 }
 
-var mnemonic = {
+var _mnemonic = {
     "cmd_save": 0,
     "cmd_quit": 0,
     "cmd_new": 0,
@@ -100,7 +100,7 @@ var mnemonic = {
 }
 
 var _ = fn(k) {
-    var m = msg[k]
+    var m = _msg[k]
     if (m == null) {
         return k
     }
@@ -112,7 +112,7 @@ var _u = fn(k) {
 }
 
 var _m = fn(k) {
-    var m = mnemonic[k]
+    var m = _mnemonic[k]
     if (m == null) {
         return 0
     }

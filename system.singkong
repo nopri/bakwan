@@ -10,40 +10,32 @@
 
 load_module("db_util")
 
-var conf_name = "bakwan.properties"
-var conf_path = userhome() + separator() + conf_name
+var _db_system_table = "bakwan"
+var _db_system_val = {
+    "param": "version",
+    "value_text": "1"
+}
+var _db_system_user_group = "user_group"
+var _db_system_user_account = "user_account"
 
-var db_types = [
+var db_system_default_user = "admin"
+var db_system_default_password = "admin"
+
+var system_db_types = [
     "User",
     "Embedded",
     "Network",
     "PostgreSQL"
 ]
-var db_types_ = join(",", db_types)
-var db_types_derby = [
+var system_db_types_ = join(",", system_db_types)
+var system_db_types_derby = [
     "User",
     "Embedded",
     "Network"
 ]
-var db_types_pg = "PostgreSQL"
+var system_db_types_pg = "PostgreSQL"
 
-var db_system_table = "bakwan"
-var db_system_val = {
-    "param": "version",
-    "value_text": "1"
-}
-
-var db_system_user_group = "user_group"
-var db_system_user_account = "user_account"
-var db_system_default_user = "admin"
-var db_system_default_password = "admin"
-
-
-var read_config = fn(ctx) {
-    return properties_read(conf_path)
-}
-
-var connect_db = fn(ctx, dt, dh, du, dp, dn) {
+var system_connect_db = fn(ctx, dt, dh, du, dp, dn) {
     var n = ctx["name"]
     if (n == null) {
         return n
@@ -65,8 +57,12 @@ var connect_db = fn(ctx, dt, dh, du, dp, dn) {
     return null
 }
 
-var get_db_info = fn(ctx, p) {
-    var conf = read_config(ctx)
+var system_read_config = fn(ctx) {
+    return properties_read(ctx["conf_path"])
+}
+
+var system_get_db_info = fn(ctx, p) {
+    var conf = system_read_config(ctx)
     var ret = [
         _("label_db_type") + ": " + conf["db_type"],
         _("label_db_host") + ": " + conf["db_host"],
@@ -79,25 +75,25 @@ var get_db_info = fn(ctx, p) {
     return ret
 }
 
-var get_db = fn(ctx) {
-    var conf = read_config(ctx)
+var system_get_db = fn(ctx) {
+    var conf = system_read_config(ctx)
     var db_host = conf["db_host"]
     var db_user = conf["db_user"]
     var db_password = conf["db_password"]
     var db_name = conf["db_name"]
     var db_type = conf["db_type"]
-    return connect_db(ctx, 
+    return system_connect_db(ctx, 
         db_type, db_host, db_user, db_password,
         db_name)
 }
 
-var is_new = fn(ctx) {
+var system_is_new = fn(ctx) {
     var db = ctx["db"]
     if (db == null) {
         return null
     }
 
-    var r = db_select_all(db, db_system_table)
+    var r = db_select_all(db, _db_system_table)
     return r == null
 }
 
@@ -138,36 +134,36 @@ var system_init_db = fn(ctx) {
         )
     }
 
-    if (in(db_types_derby, dt)) {
-        var r = db_create_table_derby(db, db_system_table, system_col)
-        var r = db_insert(db, db_system_table, db_system_val)
-        var r = db_create_table_derby(db, db_system_user_group, 
+    if (in(system_db_types_derby, dt)) {
+        var r = db_create_table_derby(db, _db_system_table, system_col)
+        var r = db_insert(db, _db_system_table, _db_system_val)
+        var r = db_create_table_derby(db, _db_system_user_group, 
             user_group_col)
-        var r = db_insert(db, db_system_user_group, user_group_val)
+        var r = db_insert(db, _db_system_user_group, user_group_val)
         var gid = db_last_derby(db)
         if (gid == null) {
             return null
         }
-        var r = db_create_table_derby(db, db_system_user_account, 
+        var r = db_create_table_derby(db, _db_system_user_account, 
             user_account_col)
         set(user_account_val, "user_account_group_id", gid)
-        var r = db_insert(db, db_system_user_account, user_account_val)
+        var r = db_insert(db, _db_system_user_account, user_account_val)
 
     }
-    if (dt == db_types_pg) {
-        var r = db_create_table_postgresql(db, db_system_table, system_col)
-        var r = db_insert(db, db_system_table, db_system_val)
+    if (dt == system_db_types_pg) {
+        var r = db_create_table_postgresql(db, _db_system_table, system_col)
+        var r = db_insert(db, _db_system_table, _db_system_val)
         var r = db_create_table_postgresql(db, 
-            db_system_user_group, user_group_col)
-        var r = db_insert(db, db_system_user_group, user_group_val)
+            _db_system_user_group, user_group_col)
+        var r = db_insert(db, _db_system_user_group, user_group_val)
         var gid = db_last_postgresql(db)
         if (gid == null) {
             return null
         }
-        var r = db_create_table_postgresql(db, db_system_user_account, 
+        var r = db_create_table_postgresql(db, _db_system_user_account, 
             user_account_col)
         set(user_account_val, "user_account_group_id", gid)
-        var r = db_insert(db, db_system_user_account, user_account_val)
+        var r = db_insert(db, _db_system_user_account, user_account_val)
     }
     return true 
 }
@@ -254,13 +250,13 @@ var system_upgrade_db = fn(ctx) {
                 ["description", "varchar"]
             ]
 
-            if (in(db_types_derby, dt)) {
+            if (in(system_db_types_derby, dt)) {
                 var r = db_create_table_derby(db, "account_coa", account_coa_col)
                 if (r[0] == null) {
                     return null                
                 }
             }
-            if (dt == db_types_pg) {
+            if (dt == system_db_types_pg) {
                 var r = db_create_table_postgresql(db, "account_coa", account_coa_col)
                 if (r[0] == null) {
                     return null                
@@ -286,7 +282,7 @@ var system_upgrade_db = fn(ctx) {
                 ["reference", "varchar"]
             ]
 
-            if (in(db_types_derby, dt)) {
+            if (in(system_db_types_derby, dt)) {
                 var r = db_create_table_derby(db, "account_transaction", account_transaction_col)
                 if (r[0] == null) {
                     return null                
@@ -296,7 +292,7 @@ var system_upgrade_db = fn(ctx) {
                     return null                
                 }
             }
-            if (dt == db_types_pg) {
+            if (dt == system_db_types_pg) {
                 var r = db_create_table_postgresql(db, "account_transaction", account_transaction_col)
                 if (r[0] == null) {
                     return null                
@@ -333,9 +329,9 @@ var system_upgrade_db = fn(ctx) {
                 return null
             }
             if (empty(a[0])) {
-                each(accounts_template, fn(e, i) {
+                each(account_template, fn(e, i) {
                     var d = {
-                        "account_type": ac_types_code[e[0]],
+                        "account_type": account_types_code[e[0]],
                         "code": e[1],
                         "description": e[2]
                     }
@@ -402,3 +398,4 @@ var system_auth = fn(ctx, u, p) {
     }
     return []
 }
+

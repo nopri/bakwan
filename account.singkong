@@ -7,70 +7,70 @@
     Noprianto (nop@noprianto.com)
 ;
 
-var ac_type_asset = "Asset"
-var ac_type_liability = "Liability"
-var ac_type_equity = "Equity"
-var ac_type_income = "Income"
-var ac_type_expense = "Expense"
+var account_type_asset = "Asset"
+var account_type_liability = "Liability"
+var account_type_equity = "Equity"
+var account_type_income = "Income"
+var account_type_expense = "Expense"
 
-var ac_types = [
-    ac_type_asset,
-    ac_type_liability,
-    ac_type_equity,
-    ac_type_income,
-    ac_type_expense
+var account_types = [
+    account_type_asset,
+    account_type_liability,
+    account_type_equity,
+    account_type_income,
+    account_type_expense
 ]
-var ac_types_ = join(",", ac_types)
+var account_types_ = join(",", account_types)
 
-var ac_mask = "###"
-var ac_char = "___"
+var account_mask = "###"
+var account_char = "___"
 
-var ac_types_code = {
-    ac_type_asset: 1,
-    ac_type_liability: 2,
-    ac_type_equity: 3,
-    ac_type_income: 4,
-    ac_type_expense: 5,
+var account_types_code = {
+    account_type_asset: 1,
+    account_type_liability: 2,
+    account_type_equity: 3,
+    account_type_income: 4,
+    account_type_expense: 5,
 }
-var ac_types_code_r = {
-    1: ac_type_asset,
-    2: ac_type_liability,
-    3: ac_type_equity,
-    4: ac_type_income,
-    5: ac_type_expense,
+var account_types_code_r = {
+    1: account_type_asset,
+    2: account_type_liability,
+    3: account_type_equity,
+    4: account_type_income,
+    5: account_type_expense,
 }
 
-var accounts_template = [
-    [ac_type_asset, "110", "Cash"],
-    [ac_type_asset, "120", "Accounts Receivable"],
-    [ac_type_asset, "130", "Inventory"],
-    [ac_type_liability, "210", "Accounts Payable"],
-    [ac_type_equity, "310", "Owner's Equity"],
-    [ac_type_income, "410", "Revenue"],
-    [ac_type_expense, "510", "Utilities"],
-    [ac_type_expense, "520", "Cost of Goods Sold"]
+var account_template = [
+    [account_type_asset, "110", "Cash"],
+    [account_type_asset, "120", "Accounts Receivable"],
+    [account_type_asset, "130", "Inventory"],
+    [account_type_liability, "210", "Accounts Payable"],
+    [account_type_equity, "310", "Owner's Equity"],
+    [account_type_income, "410", "Revenue"],
+    [account_type_expense, "510", "Utilities"],
+    [account_type_expense, "520", "Cost of Goods Sold"]
 ]
 
-var is_valid_account_type = fn(t) {
-    return in(ac_types, t)
+var account_is_valid_type = fn(t) {
+    return in(account_types, t)
 }
 
-var is_valid_account_code = fn(c) {
+var account_is_valid_code = fn(c) {
     var c = replace(trim(c), "_", "")
-    return ((len(c) == len(ac_mask)) & isdigit(c) )
+    return ((len(c) == len(account_mask)) & isdigit(c) )
 }
 
-var is_valid_account_desc = fn(d) {
+var account_is_valid_desc = fn(d) {
     var d = trim(d)
     return !empty(d)
 }
 
-var is_valid_account = fn(a) {
+var account_is_valid = fn(a) {
     if (is(a, "ARRAY")) {
         if (len(a) == 3) {
-            return is_valid_account_type(a[0]) &
-                is_valid_account_code(a[1]) &
-                is_valid_account_desc(a[2])
+            return account_is_valid_type(a[0]) &
+                account_is_valid_code(a[1]) &
+                account_is_valid_desc(a[2])
         }
     }
     return false
@@ -83,3 +83,4 @@ var account_details = fn(a) {
     })
     return join(lf(), ret)
 }
+

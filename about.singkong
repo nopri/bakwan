@@ -1,7 +1,6 @@
 #
     about.singkong
     Information about the application/runtime
-    
     part of Bakwan: simple accounting software
     
     Authors:
@@ -9,13 +8,13 @@
     Noprianto (nop@noprianto.com)
 ;
 
-var font_size_manual = fn(comp, size) {
+var _font_size_manual = fn(comp, size) {
     var comp_font = get(comp, "font")
     set(comp_font, 2, size)
     config(comp, "font", comp_font)
 }
 
-var get_authors = fn(ctx) {
+var _get_authors = fn(ctx) {
     var pad_a = 8 * " " 
     var pad_b = 12 * " "
     var a = pad_a + _("_authors")
@@ -29,22 +28,21 @@ var get_authors = fn(ctx) {
 
 var about_form = fn(ctx) {
     var about_grid = component("grid", "")
-    var path_to_conf = variables()["CONF_PATH"][1]
     var about_title = component("label", 
         _("title_about") + " " + ctx["name"], true)
-    font_size_manual(about_title, 30)
+    _font_size_manual(about_title, 30)
     config(about_title, "align",  1)
 
     var tech_string = [
-        [_("_config_file"), path_to_conf]    
+        [_("_config_file"), ctx["conf_path"]]    
     ]
 
     var general_about = component("edit", _("about_general_string"), true)
-    var authors_about = component("edit", get_authors(ctx), true)
+    var authors_about = component("edit", _get_authors(ctx), true)
     var tech_about = component("table", _("table_about"), true)
 
-    font_size_manual(general_about, 16)
-    font_size_manual(authors_about, 16)
+    _font_size_manual(general_about, 16)
+    _font_size_manual(authors_about, 16)
     config(tech_about, "contents", tech_string)
     grid_add(about_grid, about_title, 0, 0, 2, 1, 1, 0, 1, 0)
     grid_add(about_grid, general_about, 0, 1, 1, 1, 1, 1, 3, 0)

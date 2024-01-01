@@ -19,6 +19,7 @@ load_file_or_resource("config.singkong")
 load_file_or_resource("about.singkong")
 
 var app_name = "Bakwan"
+var app_conf = "bakwan.properties"
 
 reset()
 title(app_name)
@@ -33,6 +34,8 @@ var ctx = {
         ["Noprianto", "nop@noprianto.com"],
         ["Budiman", "Budyzhang778@gmail.com"]
     ],
+
+    "conf_path": userhome() + separator() + app_conf,
 
     "db": null,
     "db_type": "",
@@ -78,8 +81,9 @@ var app_menu = fn(ctx) {
                 [
                     _("menu_about"), 
                     _m("menu_about"), 
-                    true, fn(){
-                        about_form(ctx)
+                    true, 
+                    fn() {
+                        var r = about_form(ctx)
                     }
                 ]
             ]
@@ -102,12 +106,12 @@ var init_ui = fn(ctx) {
     menubar(app_menu(ctx))
 }
 
-var conf = read_config(ctx)
+var conf = system_read_config(ctx)
 var conf_status = repeat {
     if (empty(conf)) {
         var r = config_form(ctx)
         if (r["config"] == true | r["command"] == "close") {
-            var conf = read_config(ctx)
+            var conf = system_read_config(ctx)
             return r
         }
     } else {
@@ -118,13 +122,13 @@ var conf_status = repeat {
 if (empty(conf)) {
     frame_close()
 } else {
-    var db = get_db(ctx)
+    var db = system_get_db(ctx)
     if (db == null) {
-        var n = join(lf(), get_db_info(ctx, false))
+        var n = join(lf(), system_get_db_info(ctx, false))
         var m = _("error_db_connect") + lf() + n + lf() + _("confirm_config_reset")
         var r = confirm(m, _("title_confirm"))
         if (r == "OK") {
-            if (properties_write(conf_path, {})) {
+            if (properties_write(ctx["conf_path"], {})) {
                 message(_("info_app_restart"), _("title_info"))
             } else {
                 message(_("error_config_write"), _("title_error"))
@@ -137,7 +141,7 @@ if (empty(conf)) {
         set(ctx, "db_host", conf["db_host"])
         set(ctx, "db_name", conf["db_name"])
 
-        if (is_new(ctx)) {
+        if (system_is_new(ctx)) {
             var r = system_init_db(ctx)
             if (r == null) {
                 message(_("error_db_init"), _("title_error"))
