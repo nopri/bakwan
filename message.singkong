@@ -36,6 +36,7 @@ var _msg = {
     "label_db_user": "User",
     "label_db_password": "Password",
     "label_db_name": "Name",
+    "label_user_db_path": "User database path",
     "error_company_name": "Please fill in the company name",
     "error_account_edit": "Please select an account to edit",
     "error_account_delete": "Please select an account to delete",

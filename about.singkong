@@ -33,9 +33,35 @@ var about_form = fn(ctx) {
     _font_size_manual(about_title, 30)
     config(about_title, "align",  1)
 
+    var pad_ = 8 * " "
+
     var tech_string = [
-        [_("_config_file"), ctx["conf_path"]]    
+        [_("_config_file"), system_get_string(ctx["conf_path"])],
+        [_("label_db_type"), system_get_string(ctx["db_type"])]
     ]
+    if (ctx["db_type"] == system_db_type_user) {
+        var tech_string = array_extend(tech_string, [
+            [
+                pad_ + _("label_user_db_path"), 
+                userhome() + separator() + ctx["name"]
+            ]
+        ])
+    }
+
+    var tech_string = array_extend(tech_string, [
+        [
+            pad_ + _("label_db_host"), 
+            system_get_string(ctx["db_host"])
+        ],
+        [
+            pad_ + _("label_db_user"), 
+            system_get_string(ctx["db_user"])
+        ],
+        [
+            pad_ + _("label_db_name"), 
+            system_get_string(ctx["db_name"])
+        ]
+    ])
 
     var general_about = component("edit", _("about_general_string"), true)
     var authors_about = component("edit", _get_authors(ctx), true)

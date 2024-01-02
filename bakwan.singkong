@@ -40,6 +40,7 @@ var ctx = {
     "db": null,
     "db_type": "",
     "db_host": "",
+    "db_user": "",
     "db_name": "",
 
     "user": null,
@@ -140,6 +141,7 @@ if (empty(conf)) {
         set(ctx, "db_type", conf["db_type"])
         set(ctx, "db_host", conf["db_host"])
         set(ctx, "db_name", conf["db_name"])
+        set(ctx, "db_user", conf["db_user"])
 
         if (system_is_new(ctx)) {
             var r = system_init_db(ctx)
@@ -151,9 +153,9 @@ if (empty(conf)) {
                     _("success_db_init") + lf() +
                     _("info_app_user") + ": " + lf() +
                     upper(_("_username"), true) + ": " + 
-                    db_system_default_user + lf() +
+                    system_default_user + lf() +
                     upper(_("_password"), true) + ": " + 
-                    db_system_default_password + lf(),
+                    system_default_password + lf(),
                     _("title_info")
                 )
             }

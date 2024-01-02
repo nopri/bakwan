@@ -18,22 +18,33 @@ var _db_system_val = {
 var _db_system_user_group = "user_group"
 var _db_system_user_account = "user_account"
 
-var db_system_default_user = "admin"
-var db_system_default_password = "admin"
+var system_default_user = "admin"
+var system_default_password = "admin"
 
+var system_db_type_user = "User"
+var system_db_type_embedded = "Embedded"
+var system_db_type_network = "Network"
+var system_db_type_pg = "PostgreSQL"
 var system_db_types = [
-    "User",
-    "Embedded",
-    "Network",
-    "PostgreSQL"
+    system_db_type_user, 
+    system_db_type_embedded,
+    system_db_type_network,
+    system_db_type_pg
 ]
 var system_db_types_ = join(",", system_db_types)
 var system_db_types_derby = [
-    "User",
-    "Embedded",
-    "Network"
+    system_db_type_user, 
+    system_db_type_embedded,
+    system_db_type_network
 ]
-var system_db_types_pg = "PostgreSQL"
+var system_db_types_pg = system_db_type_pg
+
+var system_get_string = fn(o) {
+    if (o == null) {
+        return ""
+    }
+    return string(o)
+}
 
 var system_connect_db = fn(ctx, dt, dh, du, dp, dn) {
     var n = ctx["name"]
@@ -127,10 +138,10 @@ var system_init_db = fn(ctx) {
     var user_account_val = {
         "name": "default",
         "user_account_group_id": null,
-        "name": db_system_default_user,
+        "name": system_default_user,
         "salt": user_account_salt,
         "password": md5(
-            db_system_default_password + user_account_salt
+            system_default_password + user_account_salt
         )
     }
 
