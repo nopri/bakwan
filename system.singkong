@@ -18,6 +18,8 @@ var _db_system_val = {
 var _db_system_user_group = "user_group"
 var _db_system_user_account = "user_account"
 
+var system_db_latest = 5
+
 var system_default_user = "admin"
 var system_default_password = "admin"
 
@@ -53,16 +55,16 @@ var system_connect_db = fn(ctx, dt, dh, du, dp, dn) {
     }
 
     var c = "//" + dh + "/" + dn
-    if (dt == "User") {
+    if (dt == system_db_type_user) {
         return db_connect_embed_user(n)
     } 
-    if (dt == "Embedded") {
+    if (dt == system_db_type_embedded) {
         return db_connect_embed(dn)
     }
-    if (dt == "Network") {
+    if (dt == system_db_type_network) {
         return db_connect("derby", c, du, dp)
     }
-    if (dt == "PostgreSQL") {
+    if (dt == system_db_type_pg) {
         return db_connect("postgresql", c, du, dp)
     }
     return null
@@ -231,11 +233,10 @@ var system_upgrade_db = fn(ctx) {
     }
     var dt = ctx["db_type"]
 
-    var latest = 5
     var res = []
     var r = repeat {
         var v = system_db_get_version(ctx)
-        if (v == latest) {
+        if (v == system_db_latest) {
             return false
         }
         if (v == null) {
@@ -366,7 +367,7 @@ var system_upgrade_db = fn(ctx) {
         if (rv == true) {
             res + rv
         }
-        if (cv == latest) { 
+        if (cv == system_db_latest) { 
             return true
         }
     }
