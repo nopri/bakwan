@@ -8,7 +8,7 @@
     Budiman
 ;
 
-var button_opt = {
+var _button_opt = {
     0: [-16750849, -1],
     1: [-16724992, -1],
     2: [-52429, -1],
@@ -17,9 +17,9 @@ var button_opt = {
     5: [-1, -16777216]
 }
 
-var c_btn_ = fn(a, t, m) {
+var ui_c_btn_ = fn(a, t, m) {
     var b = component("button", a)
-    var c = button_opt[t]
+    var c = _button_opt[t]
     if (c != null) {
         config(b, "background", c[0])
         config(b, "foreground", c[1])
@@ -28,34 +28,34 @@ var c_btn_ = fn(a, t, m) {
     return b
 }
 
-var c_btn = fn(a) {
-    return c_btn_(a, 0, 0)
+var ui_c_btn = fn(a) {
+    return ui_c_btn_(a, 0, 0)
 }
 
 
-var d_btn = fn(b, t) {
-    var c = button_opt[t]
+var ui_d_btn = fn(b, t) {
+    var c = _button_opt[t]
     if (c != null) {
         config(b, "background", c[0])
         config(b, "foreground", c[1])
     }    
 }
 
-var d_btn_s = fn(b) {
+var ui_d_btn_s = fn(b) {
     config(b, "margin", [1, 2, 1, 2])
-    return d_btn(b, 5)
+    return ui_d_btn(b, 5)
 }
 
-var d_cmb_border = fn(c, b) {
+var ui_d_cmb_border = fn(c, b) {
     config(c, "border", b)
     config(c, "background", "white")
 }
 
-var d_grid = fn(g) {
+var ui_d_grid = fn(g) {
     config(g, "background", "white")
 }
 
-var c_text = fn(a) {
+var ui_c_text = fn(a) {
     var g = component("grid", "text")
     var t = component("text", "")
     config(t, "border", a)
@@ -65,7 +65,7 @@ var c_text = fn(a) {
     return [g, t, x]
 }
 
-var s_text_label = fn(a, s, t) {
+var ui_s_text_label = fn(a, s, t) {
     if (!is(a, "ARRAY")) {
         return false
     }
@@ -98,13 +98,14 @@ var s_text_label = fn(a, s, t) {
     return true    
 }
 
-var c_disable_text = fn(c) {
+var ui_c_disable_text = fn(c) {
     var lbl = component("label", "")
     config(c, "enabled", false)
     config(c, "background", get(lbl, "background"))
 }
 
-var c_enable_text = fn(c) {
+var ui_c_enable_text = fn(c) {
     config(c, "enabled", true)
     config(c, "background", "white")
 }
+
