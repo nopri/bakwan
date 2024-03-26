@@ -21,6 +21,27 @@ var contact_privileges = fn(ctx) {
 var contact_form = fn(ctx) {
     var p = contact_privileges(ctx)
     var g = component("grid", contact_title)
+
+    if (p["select"] == true){
+        var contact_grid = component("grid", "contacts_content")
+        
+        var contact_search_text = ui_c_text(_msg["_search"])
+
+        var contact_button_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
+        var contact_button_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
+        var contact_button_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
+
+        grid_add(contact_grid, contact_search_text[0], 0,0, 1,1, 15,0, 1,1)
+        grid_add(contact_grid, contact_button_new,  2,0, 1,1, 1,0, 1,2)
+        grid_add(contact_grid, contact_button_edit,  3,0, 1,1, 1,0, 1,2)
+        grid_add(contact_grid, contact_button_delete,  4,0, 1,1, 1,0, 1,2)
+        
+        var contact_filler = component("panel", "")
+        grid_add(contact_grid, contact_filler,      0,1, 1,1, 1,2, 1,1)
+        
+        grid_add(g, contact_grid,0,0,1,1,1,1, 3,0)
+    }
+
     return g
 }
 
