@@ -411,3 +411,12 @@ var system_auth = fn(ctx, u, p) {
     return []
 }
 
+var system_privileges_template = fn() {
+    return {
+        _select: false,
+        _insert: false,
+        _update: false,
+        _delete: false
+    }
+}
+

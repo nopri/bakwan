@@ -1,0 +1,27 @@
+#
+    dashboard.singkong
+    Dashboard
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+;
+
+var dashboard_title = _("title_dashboard")
+
+var dashboard_privileges = fn(ctx) {
+    var p = system_privileges_template()
+    set(p, _select, true)
+    set(p, _insert, true)
+    set(p, _update, true)
+    set(p, _delete, true)
+    return p
+}
+
+var dashboard_form = fn(ctx) {
+    var p = dashboard_privileges(ctx)
+    var g = component("grid", dashboard_title)
+    return g
+}
+
+

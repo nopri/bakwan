@@ -1,0 +1,27 @@
+#
+    contact.singkong
+    Contacts
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Noprianto (nop@noprianto.com)
+;
+
+var contact_title = _("title_contact")
+
+var contact_privileges = fn(ctx) {
+    var p = system_privileges_template()
+    set(p, _select, true)
+    set(p, _insert, true)
+    set(p, _update, true)
+    set(p, _delete, true)
+    return p
+}
+
+var contact_form = fn(ctx) {
+    var p = contact_privileges(ctx)
+    var g = component("grid", contact_title)
+    return g
+}
+
+

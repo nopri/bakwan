@@ -17,9 +17,16 @@ load_file_or_resource("setup.singkong")
 load_file_or_resource("message.singkong")
 load_file_or_resource("config.singkong")
 load_file_or_resource("about.singkong")
+load_file_or_resource("dashboard.singkong")
+load_file_or_resource("contact.singkong")
 
 var app_name = "Bakwan"
 var app_conf = "bakwan.properties"
+
+var _select = "select"
+var _insert = "insert"
+var _update = "update"
+var _delete = "delete"
 
 reset()
 title(app_name)
@@ -105,6 +112,11 @@ var init_ui = fn(ctx) {
     })
 
     menubar(app_menu(ctx))
+
+    var tab_main = component("tab", "")
+    tab_add(tab_main, dashboard_form(ctx))
+    tab_add(tab_main, contact_form(ctx))
+    add(tab_main)
 }
 
 var conf = system_read_config(ctx)
