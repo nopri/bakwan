@@ -69,7 +69,7 @@ var _msg = {
     "menu_settings": "Settings",
     "menu_about": "About",
     "_start": "start",
-    "_search": "search",
+    "_search": "Search",
     "_end": "end",
     "_code": "code",
     "_db": "database",
