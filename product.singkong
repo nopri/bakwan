@@ -1,0 +1,57 @@
+#
+    product.singkong
+    Products
+    part of Bakwan: simple accounting software
+    
+    Authors:
+    Budiman (budyzhang778@gmail.com)
+;
+
+var product_title = _("title_product")
+
+var product_privileges = fn(ctx) {
+    var p = system_privileges_template()
+    set(p, _select, true)
+    set(p, _insert, true)
+    set(p, _update, true)
+    set(p, _delete, true)
+    return p
+}
+
+var product_form = fn(ctx) {
+    var p = product_privileges(ctx)
+    var g = component("grid", product_title)
+
+    var product_grid = component("grid", "product__content")
+    
+    var txt_search = ui_c_text(upper(_msg["_search"], true))
+
+    var btn_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
+    var btn_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
+    var btn_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
+
+    var pnl_filler = component("panel", "")
+    var cbx_sort = component("combobox", _msg["combobox_product"])
+    var cbx_general = component("combobox", _msg["combobox_general_sort"])
+
+    var tbl_product = component("table",_msg["table_product"])
+
+    var lbl_row = component("label", "Showing products____Row(s)")
+
+    grid_add(product_grid, txt_search[0],   0,0, 1,1, 14,0, 1,1)
+    grid_add(product_grid, cbx_sort,        1,0, 1,1, 1,0, 1,1)
+    grid_add(product_grid, cbx_general,     2,0, 1,1, 1,0, 1,1)
+    grid_add(product_grid, pnl_filler,      3,0, 1,1, 1,0, 1,1)
+    grid_add(product_grid, btn_new,         4,0, 1,1, 1,0, 1,2)
+    grid_add(product_grid, btn_edit,        5,0, 1,1, 1,0, 1,2)
+    grid_add(product_grid, btn_delete,      6,0, 1,1, 1,0, 1,2)
+    
+    grid_add(product_grid, tbl_product,     0,1, 7,1, 1,2, 3,1)
+    grid_add(product_grid, lbl_row,         0,2, 1,1, 1,0, 1,1)
+
+    grid_add(g, product_grid, 0,0,1,1,1,1,3,0)
+
+    return g
+}
+
+
