@@ -23,35 +23,32 @@ var contact_form = fn(ctx) {
     var p = contact_privileges(ctx)
     var g = component("grid", contact_title)
 
-    var contact_grid = component("grid", "contacts_content")
+    var contact_grid = component("grid", "contacts__content")
     
-    var search_text = ui_c_text(_msg["_search"])
+    var txt_search = ui_c_text(upper(_msg["_search"], true))
 
-    var button_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
-    var button_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
-    var button_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
+    var btn_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
+    var btn_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
+    var btn_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
 
-    var filler = component("panel", "")
-    var sort = component("combobox", "Sort Type, Name, Number, etc")
+    var pnl_filler = component("panel", "")
+    var cbx_sort = component("combobox", _msg["combobox_contact"])
+    var cbx_general = component("combobox", _msg["combobox_general_sort"])
 
-    var table = component("table",   "a,b,c,d")
-    var row_label = component("label", "Showing Contacts " + 10 +" Row(s)")
+    var tbl_contact = component("table",_msg["table_contact"])
+
+    var lbl_row = component("label", "Showing Contacts____Row(s)")
+
+    grid_add(contact_grid, txt_search[0],   0,0, 1,1, 14,0, 1,1)
+    grid_add(contact_grid, cbx_sort,        1,0, 1,1, 1,0, 1,1)
+    grid_add(contact_grid, cbx_general,     2,0, 1,1, 1,0, 1,1)
+    grid_add(contact_grid, pnl_filler,      3,0, 1,1, 1,0, 1,1)
+    grid_add(contact_grid, btn_new,         4,0, 1,1, 1,0, 1,2)
+    grid_add(contact_grid, btn_edit,        5,0, 1,1, 1,0, 1,2)
+    grid_add(contact_grid, btn_delete,      6,0, 1,1, 1,0, 1,2)
     
-    var count_change = fn(row_count){
-        var row_text = "Showing Contacts " + row_count +" Row(s)"
-        config(row_label, "text", row_text)
-    }    
-    count_change(0)
-
-    grid_add(contact_grid, search_text[0],  0,0, 1,1, 14,0, 1,1)
-    grid_add(contact_grid, sort,            1,0, 1,1, 1,0, 1,1)
-    grid_add(contact_grid, filler,          2,0, 1,1, 1,0, 1,1)
-    grid_add(contact_grid, button_new,      3,0, 1,1, 1,0, 1,2)
-    grid_add(contact_grid, button_edit,     4,0, 1,1, 1,0, 1,2)
-    grid_add(contact_grid, button_delete,   5,0, 1,1, 1,0, 1,2)
-    
-    grid_add(contact_grid, table,           0,1, 6,1, 1,2, 3,1)
-    grid_add(contact_grid, row_label,       0,2, 1,1, 1,0, 1,1)
+    grid_add(contact_grid, tbl_contact,     0,1, 7,1, 1,2, 3,1)
+    grid_add(contact_grid, lbl_row,         0,2, 1,1, 1,0, 1,1)
 
     grid_add(g, contact_grid, 0,0,1,1,1,1,3,0)
 
