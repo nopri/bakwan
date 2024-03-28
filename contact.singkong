@@ -23,7 +23,7 @@ var contact_form = fn(ctx) {
     var p = contact_privileges(ctx)
     var g = component("grid", contact_title)
 
-    var contact_grid = component("grid", "contacts__content")
+    var contact_grid = component("grid", "contact__content")
     
     var txt_search = ui_c_text(upper(_msg["_search"], true))
 
