@@ -23,7 +23,7 @@ var contact_form = fn(ctx) {
     var p = contact_privileges(ctx)
     var g = component("grid", contact_title)
 
-    var grid_contact = component("grid", "contacts__content")
+    var grid_contact = component("grid", "contact__content")
     var grid_navi = component("grid","")
     var grid_info = component("grid", "")
 
