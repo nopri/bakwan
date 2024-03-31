@@ -5,6 +5,7 @@
     
     Authors:
     Budiman (budyzhang778@gmail.com)
+    Noprianto (nop@noprianto.com)
 ;
 
 var product_title = _("title_product")
@@ -22,43 +23,39 @@ var product_form = fn(ctx) {
     var p = product_privileges(ctx)
     var g = component("grid", product_title)
 
-    var grid_product = component("grid", "product__content")
-    var grid_navi = component("grid","")
-    var grid_info = component("grid", "")
+    var grid_product = component("grid", "product__main")
+    var grid_nav = component("grid","")
+    var grid_btn = component("grid", "")
 
-    var txt_search = ui_c_text(upper(_msg["_search"], true))
-
+    var txt_search = ui_c_text(upper(_("_search"), true))
     var btn_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
     var btn_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
     var btn_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
+    var pnl_fill = component("panel", "")
+    var cmb_column = component("combobox", _("table_product"))
+    var cmb_sort = component("combobox", _("combobox_sort"))
 
-    var pnl_filler = component("panel", "")
-    var cbx_sort = component("combobox", _msg["cmb_product"])
-    var cbx_general = component("combobox", _msg["cmb_general_sort"])
-
-    var tbl_product = component("table",_msg["table_product"])
+    var tbl_product = component("table",_("table_product"))
 
     var lbl_row = component("label", " ")
-    # Placeholder button;
-    var btn_view = ui_c_btn_("View", 0, "")
     
-    grid_add(grid_navi, txt_search[0],   0,0, 1,1, 14,0, 1,1)
-    grid_add(grid_navi, cbx_sort,        1,0, 1,1, 1,0, 1,1)
-    grid_add(grid_navi, cbx_general,     2,0, 1,1, 1,0, 1,1)
-    grid_add(grid_navi, pnl_filler,      3,0, 1,1, 1,0, 1,1)
-    grid_add(grid_navi, btn_new,         4,0, 1,1, 1,0, 1,2)
-    grid_add(grid_navi, btn_edit,        5,0, 1,1, 1,0, 1,2)
-    grid_add(grid_navi, btn_delete,      6,0, 1,1, 1,0, 1,2)
-    grid_add(grid_product, grid_navi,    0,0, 1,1, 1,0, 1,1)
+    var btn_view = ui_c_btn_(_("cmd_view"), 5, _m("cmd_view"))
+    grid_add(grid_btn, btn_view,        0,1, 1,1, 1,1, 0,1)
+    
+    grid_add(grid_nav, txt_search[0],   0,0, 1,1, 14,0, 1,1)
+    grid_add(grid_nav, cmb_column,      1,0, 1,1, 1,0, 1,1)
+    grid_add(grid_nav, cmb_sort,        2,0, 1,1, 1,0, 1,1)
+    grid_add(grid_nav, pnl_fill,        3,0, 1,1, 1,0, 1,1)
+    grid_add(grid_nav, btn_new,         4,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_edit,        5,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_delete,      6,0, 1,1, 1,0, 1,2)
 
-    grid_add(grid_product, tbl_product,  0,1, 1,1, 1,1, 3,1)
+    grid_add(grid_product, grid_nav,    0,0, 1,1, 1,0, 1,1)
+    grid_add(grid_product, tbl_product, 0,1, 1,1, 1,1, 3,1)
+    grid_add(grid_product, lbl_row,     0,2, 1,1, 1,0, 1,1)
+    grid_add(grid_product, grid_btn,    0,3, 1,1, 1,0, 3,1)
 
-    grid_add(grid_product, lbl_row,      0,2, 1,1, 1,0, 1,1)
-
-    grid_add(grid_info, btn_view,        0,1, 1,1, 1,1, 0,1)
-    grid_add(grid_product, grid_info,    0,3, 1,1, 1,0, 3,1)
-
-    grid_add(g, grid_product,            0,0, 1,1, 1,1, 3,0)
+    grid_add(g, grid_product,           0,0, 1,1, 1,1, 3,0)
 
     return g
 }
