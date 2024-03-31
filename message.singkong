@@ -57,6 +57,8 @@ var _msg = {
     "table_product": "Name, ID, Stock, Status",
     "cmb_general_sort": "Desc, Asc",
     "cmb_product": "Name, ID, Stock, Status",
+    "table_contact": "Name, ID, Number, Email",
+    "cmb_contact": "Name, ID, Number, Email",
     "success_db_connected": "Successfully connected to database",
     "success_config_write": "Successfully updated configuration",
     "success_db_init": "Successfully initialized database", 
