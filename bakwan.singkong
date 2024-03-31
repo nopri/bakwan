@@ -19,6 +19,7 @@ load_file_or_resource("config.singkong")
 load_file_or_resource("about.singkong")
 load_file_or_resource("dashboard.singkong")
 load_file_or_resource("contact.singkong")
+load_file_or_resource("product.singkong")
 
 var app_name = "Bakwan"
 var app_conf = "bakwan.properties"
@@ -116,6 +117,7 @@ var init_ui = fn(ctx) {
     var tab_main = component("tab", "")
     tab_add(tab_main, dashboard_form(ctx))
     tab_add(tab_main, contact_form(ctx))
+    tab_add(tab_main, product_form(ctx))
     add(tab_main)
 }
 
