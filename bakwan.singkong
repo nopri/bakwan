@@ -116,8 +116,13 @@ var init_ui = fn(ctx) {
 
     var tab_main = component("tab", "")
     tab_add(tab_main, dashboard_form(ctx))
-    tab_add(tab_main, contact_form(ctx))
-    tab_add(tab_main, product_form(ctx))
+
+    if (contact_privileges(ctx)[_select]) {
+        tab_add(tab_main, contact_form(ctx))
+    }
+    if (product_privileges(ctx)[_select]) {
+        tab_add(tab_main, product_form(ctx))
+    }
     add(tab_main)
 }
 
