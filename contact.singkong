@@ -28,6 +28,7 @@ var contact_form = fn(ctx) {
     var grid_btn = component("grid", "")
 
     var txt_search = ui_c_text(upper(_("_search"), true))
+    var btn_load =  ui_c_btn_(_("cmd_load"), 0, _m("cmd_load"))
     var btn_new =  ui_c_btn_(_("cmd_new"), 1, _m("cmd_new"))
     var btn_edit = ui_c_btn_(_("cmd_edit"), 3, _m("cmd_edit"))
     var btn_delete = ui_c_btn_(_("cmd_delete"), 2, _m("cmd_delete"))
@@ -35,7 +36,7 @@ var contact_form = fn(ctx) {
     var cmb_column = component("combobox", _("table_contact"))
     var cmb_sort = component("combobox", _("combobox_sort"))
 
-    var tbl_contact = component("table", _("table_contact"))
+    var tbl_contact = component("table", _("table_contact"), true)
 
     var lbl_row = component("label", " ")
 
@@ -46,9 +47,10 @@ var contact_form = fn(ctx) {
     grid_add(grid_nav, cmb_column,      1,0, 1,1, 1,0, 1,1)
     grid_add(grid_nav, cmb_sort,        2,0, 1,1, 1,0, 1,1)
     grid_add(grid_nav, pnl_fill,        3,0, 1,1, 1,0, 1,1)
-    grid_add(grid_nav, btn_new,         4,0, 1,1, 1,0, 1,2)
-    grid_add(grid_nav, btn_edit,        5,0, 1,1, 1,0, 1,2)
-    grid_add(grid_nav, btn_delete,      6,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_load,        4,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_new,         5,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_edit,        6,0, 1,1, 1,0, 1,2)
+    grid_add(grid_nav, btn_delete,      7,0, 1,1, 1,0, 1,2)
     
     grid_add(grid_contact, grid_nav,    0,0, 1,1, 1,0, 1,1)
     grid_add(grid_contact, tbl_contact, 0,1, 1,1, 1,1, 3,1)
@@ -56,6 +58,21 @@ var contact_form = fn(ctx) {
     grid_add(grid_contact, grid_btn,    0,3, 1,1, 1,0, 1,1)
     
     grid_add(g, grid_contact,           0,0, 1,1, 1,1, 3,0)
+
+    event(btn_load, fn() {
+        system_thread_timer(
+            ctx,
+            fn() {
+                config(tbl_contact, "contents", [])
+                config(btn_load, "enabled", false)
+                delay(4000) #todo;
+                config(btn_load, "enabled", true)
+            },
+            null,
+            show_progress,
+            show_progress_done
+        )
+    })
 
     return g
 }

@@ -18,6 +18,7 @@ var _msg = {
     "cmd_test_connect": "Test Connection",
     "cmd_close": "Close",
     "cmd_view": "View",
+    "cmd_load": "Load",
     "title_info": "Information",
     "title_error": "Error",
     "title_confirm": "Please confirm",
@@ -86,6 +87,7 @@ var _msg = {
     "_config_file": "Configuration file",
     "_created_with" : "Created with the Singkong programming language",
     "_authors": "Authors:",
+    "_ms": "ms",
     "about_general_string": "
         Bakwan: simple accounting software
 
@@ -102,6 +104,7 @@ var _mnemonic = {
     "cmd_test_connect": 0,
     "cmd_close": 0,
     "cmd_view": 0,
+    "cmd_load": 0,
     "menu_file": 0,
     "menu_help": 0,
     "menu_quit": 0,

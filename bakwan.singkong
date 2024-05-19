@@ -126,6 +126,16 @@ var init_ui = fn(ctx) {
     add(tab_main)
 }
 
+var show_progress = fn(ctx, data) {
+    var td = data[0]
+    var tp = td + " " + _("ms")
+    statusbar(7, tp, true)
+}
+
+var show_progress_done = fn(ctx, data) {
+    statusbar(7, "", true)
+}
+
 var conf = system_read_config(ctx)
 var conf_status = repeat {
     if (empty(conf)) {
@@ -180,7 +190,15 @@ if (empty(conf)) {
             }
         }
 
-        var r_upg = system_upgrade_db(ctx)
+        var r_upg = system_thread_delay(
+            ctx, 
+            fn() {
+                system_upgrade_db(ctx)
+            },
+            null,
+            show_progress, 
+            show_progress_done
+        )
         if (r_upg == null) {
             message(_("error_db_upgrade"), _("title_error"))
             frame_close()
@@ -205,7 +223,15 @@ if (empty(conf)) {
             if (len(r) > 1) {
                 var u = r[0]
                 var p = r[1]
-                var r_auth = system_auth(ctx, u, p)
+                var r_auth = system_thread_delay(
+                    ctx, 
+                    fn() {
+                        system_auth(ctx, u, p)
+                    },
+                    [],
+                    show_progress, 
+                    show_progress_done
+                )
                 if (len(r_auth) == 3) {
                     return r_auth
                 } else {

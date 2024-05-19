@@ -41,6 +41,8 @@ var system_db_types_derby = [
 ]
 var system_db_types_pg = system_db_type_pg
 
+var system_delay = 100
+
 var system_get_string = fn(o) {
     if (o == null) {
         return ""
@@ -418,5 +420,46 @@ var system_privileges_template = fn() {
         _update: false,
         _delete: false
     }
+}
+
+var system_thread_delay = fn(ctx, func, ret, progress, done) {
+    var ret = [ret]
+    var th = thread(fn() {
+        var res = func()
+        set(ret, 0, res)
+    })
+
+    var ts = number(@)
+    repeat {
+        delay(system_delay)
+        var td = number(@) - ts
+        if (thread_alive(th) == false) {
+            done(ctx, [td])
+            return null
+        } else {
+            progress(ctx, [td])
+        }
+    }
+    return ret[0]
+}
+
+var system_thread_timer = fn(ctx, func, ret, progress, done) {
+    var ret = [ret]
+    var th = thread(fn() {
+        var res = func()
+        set(ret, 0, res)
+    })
+
+    var ts = number(@)
+    var tm = timer(system_delay, fn() {
+        var td = number(@) - ts
+        if (thread_alive(th) == false) {
+            done(ctx, [td])
+            stop_timer(tm)
+        } else {
+            progress(ctx, [td])
+        }
+    })
+    return ret[0]
 }
 
