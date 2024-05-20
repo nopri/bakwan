@@ -60,17 +60,16 @@ var contact_form = fn(ctx) {
     grid_add(g, grid_contact,           0,0, 1,1, 1,1, 3,0)
 
     event(btn_load, fn() {
-        system_thread_timer(
-            ctx,
-            fn() {
+        thread_timer(
+            fn(p) {
                 config(tbl_contact, "contents", [])
                 config(btn_load, "enabled", false)
                 delay(4000) #todo;
                 config(btn_load, "enabled", true)
             },
-            null,
             show_progress,
-            show_progress_done
+            show_progress_done,
+            ctx["lock"]
         )
     })
 
