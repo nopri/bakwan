@@ -19,6 +19,36 @@ var product_privileges = fn(ctx) {
     return p
 }
 
+var product_load_data = fn(ctx, c) {
+    var t = c[0]
+    var n = c[1]
+    config(t, "contents", [])
+    disable_components(c)
+    
+    #todo;
+    config(n, "text", _("_wait"))
+    delay(4000)
+    var r = [[], [], [], []]
+    each(r, fn(e, i) {
+        var row_id = random(0, 100)
+        var name = words_en(string(row_id))
+        var category = _("_product")
+        var p_type = _("_stockable")
+        var variants = row_id
+        var row = [
+            row_id,
+            name,
+            category,
+            p_type,
+            variants
+        ]
+        table_add(t, [row])
+    })
+    
+    config(n, "text", len(r) + " " + _("_rows"))
+    enable_components(c)
+}
+
 var product_form = fn(ctx) {
     var p = product_privileges(ctx)
     var g = component("grid", product_title)
@@ -36,7 +66,9 @@ var product_form = fn(ctx) {
     var cmb_column = component("combobox", _("table_product"))
     var cmb_sort = component("combobox", _("combobox_sort"))
 
-    var tbl_product = component("table",_("table_product"), true)
+    var tbl_data = component("table",_("table_product"), true)
+    config(tbl_data, "margin", ctx["table_margin"])
+    table_set_row_height(tbl_data, ctx["table_row_height"])
 
     var lbl_row = component("label", " ")
     
@@ -53,7 +85,7 @@ var product_form = fn(ctx) {
     grid_add(grid_nav, btn_delete,      7,0, 1,1, 1,0, 1,2)
 
     grid_add(grid_product, grid_nav,    0,0, 1,1, 1,0, 1,1)
-    grid_add(grid_product, tbl_product, 0,1, 1,1, 1,1, 3,1)
+    grid_add(grid_product, tbl_data,    0,1, 1,1, 1,1, 3,1)
     grid_add(grid_product, lbl_row,     0,2, 1,1, 1,0, 1,1)
     grid_add(grid_product, grid_btn,    0,3, 1,1, 1,0, 3,1)
 
@@ -63,10 +95,19 @@ var product_form = fn(ctx) {
         disable_tab()
         thread_timer(
             fn(p) {
-                config(tbl_product, "contents", [])
-                config(btn_load, "enabled", false)
-                delay(4000) #todo;
-                config(btn_load, "enabled", true)
+                var c = [
+                    tbl_data,
+                    lbl_row,
+                    btn_load,
+                    btn_new,
+                    btn_edit,
+                    btn_delete,
+                    txt_search[1],
+                    cmb_column,
+                    cmb_sort,
+                    btn_view
+                ]
+                product_load_data(ctx, c)
             },
             show_progress,
             show_progress_done,

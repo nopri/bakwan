@@ -62,6 +62,9 @@ var ctx = {
     "dialog_width_2": frame_info[0] * 0.8,
     "dialog_height_2": frame_info[1] * 0.8,    
 
+    "table_margin": [4, 4],
+    "table_row_height": 26,
+
     "lock": [],
     "progress": null,
     "tab": null
@@ -141,6 +144,18 @@ var disable_tab = fn() {
 
 var enable_tab = fn() {
     config(ctx["tab"], "enabled", true)
+}
+
+var disable_components = fn(c) {
+    each(c, fn(e, i) {
+        config(e, "enabled", false)
+    })
+}
+
+var enable_components = fn(c) {
+    each(c, fn(e, i) {
+        config(e, "enabled", true)
+    })
 }
 
 var show_progress = fn(data) {
