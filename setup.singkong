@@ -54,15 +54,40 @@ var setup_load_coa = fn(ctx, tbl) {
     config(tbl, "contents", d)
 }
 
+var setup_is_coa_exists = fn(ctx, h) {
+    var c = h["code"]
+    if (c != null) {
+        var r = db_query_single(db, 
+            "select account_coa_id from account_coa where code=?",
+            [c]
+        )
+        if (r != null) {
+            var r = r[0]
+            if (empty(r)) {
+                return false
+            }
+        } else {
+            return null
+        }
+    }
+    return true
+}
+
 var setup_create_coa = fn(ctx, h) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
         return null
     }
-
-    var r = db_insert(db, "account_coa", h)
-    return r
+    
+    var t = setup_is_coa_exists(ctx, h)
+    if (t) {
+        message(_("error_account_code_exists"), _("title_error"))
+    } else {
+        var r = db_insert(db, "account_coa", h)
+        return r
+    }
+    return null
 }
 
 var setup_delete_coa = fn(ctx, h) {
@@ -219,7 +244,7 @@ var setup_form = fn(ctx) {
     event(b_coa_e, fn() {
         var a = get(tbl_coa, "active")
         if (a < 0) {
-            message(_("error_account_edit"), _("title_info"))
+            message(_("error_account_select"), _("title_info"))
             return a
         }
         var edit = {
@@ -262,7 +287,7 @@ var setup_form = fn(ctx) {
     event(b_coa_d, fn() {
         var a = get(tbl_coa, "active")
         if (a < 0) {
-            message(_("error_account_delete"), _("title_info"))
+            message(_("error_account_select"), _("title_info"))
             return a
         }
         var del = {
