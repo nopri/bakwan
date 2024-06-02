@@ -7,7 +7,9 @@
     Noprianto (nop@noprianto.com)
 ;
 
-var dashboard_title = _("title_dashboard")
+var dashboard_title = fn() {
+    return _("title_dashboard")
+}
 
 var dashboard_privileges = fn(ctx) {
     var p = system_privileges_template()
@@ -20,7 +22,7 @@ var dashboard_privileges = fn(ctx) {
 
 var dashboard_form = fn(ctx) {
     var p = dashboard_privileges(ctx)
-    var g = component("grid", dashboard_title)
+    var g = component("grid", dashboard_title())
     return g
 }
 

@@ -8,7 +8,7 @@
     Budiman (Budyzhang778@gmail.com)
 ;
 
-require(9.6)
+require(9.7)
 load_module("ui_util")
 
 load_file_or_resource("account.singkong")
@@ -30,6 +30,26 @@ var _insert = "insert"
 var _update = "update"
 var _delete = "delete"
 
+var _ = fn(k) {
+    var m = message_msg[k]
+    if (m == null) {
+        return k
+    }
+    return m
+}
+
+var _u = fn(k) {
+    return upper(_(k), true)
+}
+
+var _m = fn(k) {
+    var m = message_mnemonic[k]
+    if (m == null) {
+        return 0
+    }
+    return m
+}
+
 reset()
 title(app_name)
 var s = screen()
@@ -39,9 +59,11 @@ show()
 var frame_info = frame()
 var ctx = {
     "name": app_name,
-    "authors": [
-        ["Noprianto", "nop@noprianto.com"],
-        ["Budiman", "Budyzhang778@gmail.com"]
+    "developers": [
+        [[], "Noprianto", "nop@noprianto.com"]
+    ],
+    "contributors": [
+        [["pre-release"], "Budiman", "Budyzhang778@gmail.com"]
     ],
 
     "conf_path": userhome() + separator() + app_conf,
@@ -111,8 +133,7 @@ var app_menu = fn(ctx) {
 var init_ui = fn(ctx) {
     closing(_("confirm_quit"), _("title_confirm"))
 
-    var status_db = upper(_("_db_connected"), true) + " " + 
-        "(" + ctx["db_type"] + ")"
+    var status_db = ctx["db_type"]
     statusbar(0, status_db, true)
     statusbar(1, ctx["db_name"], true)
     statusbar(2, ctx["user"], true)
@@ -273,3 +294,4 @@ if (empty(conf)) {
         }
     }
 }
+

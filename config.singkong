@@ -12,7 +12,7 @@
 
 load_module("db_util")
 
-var _set_db_conn_param = fn(t, h, u, p, n) {
+var config_set_db_conn_param = fn(t, h, u, p, n) {
     var dt = get(t, "text")
     ui_c_enable_text(h)
     ui_c_enable_text(u)
@@ -37,12 +37,12 @@ var _set_db_conn_param = fn(t, h, u, p, n) {
     return dt
 }
 
-var _test_db_conn = fn(ctx, t, h, u, p, n) {
-    var dt = get(t, "text")
-    var dh = get(h, "contents")
-    var du = get(u, "contents")
+var config_test_db_conn = fn(ctx, t, h, u, p, n) {
+    var dt = trim(get(t, "text"))
+    var dh = trim(get(h, "contents"))
+    var du = trim(get(u, "contents"))
     var dp = get(p, "contents")
-    var dn = get(n, "contents")
+    var dn = trim(get(n, "contents"))
 
     return system_connect_db(ctx, dt, dh, du, dp, dn)
 }
@@ -88,13 +88,18 @@ var config_form = fn(ctx) {
     grid_add(g, gp, 0, 5, 2, 1, 1, 1, 3, 0)
     grid_add(g, g_btn, 0, 6, 3, 1, 1, 0, 3, 0)
 
-    _set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
+    config_set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
     event(cmb_type, fn() {
-        _set_db_conn_param(cmb_type, txt_host, txt_user, pas_db, txt_name)
+        config_set_db_conn_param(cmb_type, 
+            txt_host, 
+            txt_user, 
+            pas_db, 
+            txt_name
+        )
     })
 
     event(btn_connect, fn() {
-        var db = _test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = config_test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else {
@@ -104,18 +109,17 @@ var config_form = fn(ctx) {
 
     event(btn_save, fn() {
         set(ret, "command", "save")
-        set(ret, "config", false) # Set default value of config as false and set true when file save success;
+        set(ret, "config", false) 
 
-        # Test DB connection, return null if invalid connection;
-        var db = _test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = config_test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else{
-            var db_type_input = get(cmb_type, "text")
-            var host_input = get(txt_host, "contents")
-            var user_input = get(txt_user, "contents")
+            var db_type_input = trim(get(cmb_type, "text"))
+            var host_input = trim(get(txt_host, "contents"))
+            var user_input = trim(get(txt_user, "contents"))
             var password_input = get(pas_db, "contents")
-            var name_input = get(txt_name, "contents")
+            var name_input = trim(get(txt_name, "contents"))
             
             var config_hash = {
                 "db_type": db_type_input,
@@ -146,3 +150,4 @@ var config_form = fn(ctx) {
 
     return ret
 }
+

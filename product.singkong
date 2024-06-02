@@ -8,7 +8,9 @@
     Noprianto (nop@noprianto.com)
 ;
 
-var product_title = _("title_product")
+var product_title = fn() {
+    return _("title_product")
+}
 
 var product_privileges = fn(ctx) {
     var p = system_privileges_template()
@@ -51,7 +53,7 @@ var product_load_data = fn(ctx, c) {
 
 var product_form = fn(ctx) {
     var p = product_privileges(ctx)
-    var g = component("grid", product_title)
+    var g = component("grid", product_title())
 
     var grid_product = component("grid", "product__main")
     var grid_nav = component("grid","")

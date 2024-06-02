@@ -9,7 +9,7 @@
 
 load_module("ui_calendar")
 
-var _default_fiscal_start = fn() {
+var setup_default_fiscal_start = fn() {
     var n = part(@)
     return [
         n[0],
@@ -18,7 +18,7 @@ var _default_fiscal_start = fn() {
     ]
 }
 
-var _default_fiscal_end = fn() {
+var setup_default_fiscal_end = fn() {
     var n = part(@)
     var z = len(days_of_month(n[0], 12))
     return [
@@ -28,7 +28,7 @@ var _default_fiscal_end = fn() {
     ]
 }
 
-var _load_coa = fn(ctx, tbl) {
+var setup_load_coa = fn(ctx, tbl) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -54,7 +54,7 @@ var _load_coa = fn(ctx, tbl) {
     config(tbl, "contents", d)
 }
 
-var _create_coa = fn(ctx, h) {
+var setup_create_coa = fn(ctx, h) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -65,7 +65,7 @@ var _create_coa = fn(ctx, h) {
     return r
 }
 
-var _delete_coa = fn(ctx, h) {
+var setup_delete_coa = fn(ctx, h) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -76,7 +76,7 @@ var _delete_coa = fn(ctx, h) {
     return r
 }
 
-var _update_coa = fn(ctx, h1, h2) {
+var setup_update_coa = fn(ctx, h1, h2) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -87,7 +87,7 @@ var _update_coa = fn(ctx, h1, h2) {
     return r
 }
 
-var _set_account_code = fn(cmb, msk) {
+var setup_set_account_code = fn(cmb, msk) {
     var c = get(cmb, "text")
     var m = get(msk, "contents")
     if (endswith(m, "_")) {
@@ -96,7 +96,7 @@ var _set_account_code = fn(cmb, msk) {
     }
 }
 
-var _account_dialog = fn(ctx, edit) {
+var setup_account_dialog = fn(ctx, edit) {
     var cmb_type = component("combobox", account_types_)
     ui_d_cmb_border(cmb_type, _u("_account_type"))
     var msk_code = component("mask", account_mask)
@@ -112,9 +112,9 @@ var _account_dialog = fn(ctx, edit) {
     grid_add(g, btn_rst, 2, 0, 1, 1, 0, 0, 0, 1)
     grid_add(g, txt_desc, 0, 1, 3, 1, 1, 0, 1, 1)
 
-    _set_account_code(cmb_type, msk_code)
+    setup_set_account_code(cmb_type, msk_code)
     event(cmb_type, fn() {
-        _set_account_code(cmb_type, msk_code)
+        setup_set_account_code(cmb_type, msk_code)
     })    
 
     event(btn_rst, fn() {
@@ -149,10 +149,10 @@ var setup_form = fn(ctx) {
     var ts = component("label", upper(_("_start"), true))
     var te = component("label", upper(_("_end"), true))
 
-    var dfs = _default_fiscal_start()
+    var dfs = setup_default_fiscal_start()
     var ds = create_date_picker(dfs[0], dfs[1])
     config(ds[1], "contents", dfs[2])
-    var dfe = _default_fiscal_end()
+    var dfe = setup_default_fiscal_end()
     var de = create_date_picker(dfe[0], dfe[1])
     config(de[1], "contents", dfe[2])
 
@@ -186,10 +186,10 @@ var setup_form = fn(ctx) {
     grid_add(g, btn_close, 1, 3, 1, 1, 1, 0, 0, 2)
     grid_add(g, btn_save, 2, 3, 1, 1, 1, 0, 0, 1)
 
-    _load_coa(ctx, tbl_coa)
+    setup_load_coa(ctx, tbl_coa)
 
     event(b_coa_n, fn() {
-        var d = _account_dialog(ctx, {})
+        var d = setup_account_dialog(ctx, {})
         var r = panel_dialog(d[0], _("title_account_new"), 
             ctx["dialog_width"], ctx["dialog_height"])
         if (r == "OK") {
@@ -206,12 +206,12 @@ var setup_form = fn(ctx) {
                     "code": a[1],
                     "description": a[2]
                 }
-                if (_create_coa(ctx, h) == null) {
+                if (setup_create_coa(ctx, h) == null) {
                     message(_("error_account_create"), _("title_error"))
                 } else {
                     message(_("success_account_create"), _("title_info"))
                 }
-                _load_coa(ctx, tbl_coa)
+                setup_load_coa(ctx, tbl_coa)
             }
         }
     })
@@ -227,7 +227,7 @@ var setup_form = fn(ctx) {
             "_code": table_get_value(tbl_coa, a, 2),
             "_description": table_get_value(tbl_coa, a, 3)
         }
-        var d = _account_dialog(ctx, edit)
+        var d = setup_account_dialog(ctx, edit)
         var r = panel_dialog(d[0], _("title_account_edit"), 
             ctx["dialog_width"], ctx["dialog_height"])
         if (r == "OK") {
@@ -248,12 +248,12 @@ var setup_form = fn(ctx) {
                     "code": aa[1],
                     "description": aa[2]
                 }
-                if (_update_coa(ctx, h1, h2) == null) {
+                if (setup_update_coa(ctx, h1, h2) == null) {
                     message(_("error_account_update"), _("title_error"))
                 } else {
                     message(_("success_account_update"), _("title_info"))
                 }
-                _load_coa(ctx, tbl_coa)
+                setup_load_coa(ctx, tbl_coa)
                 config(tbl_coa, "active", a)
             }
         }
@@ -277,12 +277,12 @@ var setup_form = fn(ctx) {
             var h = [
                 ["account_coa_id = ", aid, ""]
             ]
-            if (_delete_coa(ctx, h) == null) {
+            if (setup_delete_coa(ctx, h) == null) {
                 message(_("error_account_delete"), _("title_error"))
             } else {
                 message(_("success_account_delete"), _("title_info"))
             }
-            _load_coa(ctx, tbl_coa)
+            setup_load_coa(ctx, tbl_coa)
         }
     })
 
@@ -307,3 +307,4 @@ var setup_form = fn(ctx) {
 
     return ret
 }
+

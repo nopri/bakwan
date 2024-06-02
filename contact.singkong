@@ -8,7 +8,9 @@
     Budiman (budyzhang778@gmail.com)
 ;
 
-var contact_title = _("title_contact")
+var contact_title = fn() {
+    return _("title_contact")
+}
 
 var contact_privileges = fn(ctx) {
     var p = system_privileges_template()
@@ -62,7 +64,7 @@ var contact_load_data = fn(ctx, c) {
 
 var contact_form = fn(ctx) {
     var p = contact_privileges(ctx)
-    var g = component("grid", contact_title)
+    var g = component("grid", contact_title())
 
     var grid_contact = component("grid", "contact__main")
     var grid_nav = component("grid","")

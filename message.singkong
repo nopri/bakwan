@@ -8,7 +8,7 @@
     Budiman (budyzhang778@gmail.com)
 ;
 
-var _msg = {
+var message_msg = {
     "cmd_save": "Save",
     "cmd_quit": "Quit",
     "cmd_new": "New",
@@ -86,7 +86,8 @@ var _msg = {
     "_password": "password",
     "_config_file": "Configuration file",
     "_created_with" : "Created with the Singkong programming language",
-    "_authors": "Authors:",
+    "_developers": "Developers:",
+    "_contributors": "Contributors:",
     "_ms": "ms",
     "_wait": "Please wait...",
     "_rows": "rows",
@@ -98,7 +99,7 @@ var _msg = {
     "
 }
 
-var _mnemonic = {
+var message_mnemonic = {
     "cmd_save": 0,
     "cmd_quit": 0,
     "cmd_new": 0,
@@ -114,25 +115,5 @@ var _mnemonic = {
     "menu_quit": 0,
     "menu_settings": 0,
     "menu_about": 0,
-}
-
-var _ = fn(k) {
-    var m = _msg[k]
-    if (m == null) {
-        return k
-    }
-    return m
-}
-
-var _u = fn(k) {
-    return upper(_(k), true)
-}
-
-var _m = fn(k) {
-    var m = _mnemonic[k]
-    if (m == null) {
-        return 0
-    }
-    return m
 }
 

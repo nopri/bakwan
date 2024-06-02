@@ -10,13 +10,13 @@
 
 load_module("db_util")
 
-var _db_system_table = "bakwan"
-var _db_system_val = {
+var system_db_table = "bakwan"
+var system_db_val = {
     "param": "version",
     "value_text": "1"
 }
-var _db_system_user_group = "user_group"
-var _db_system_user_account = "user_account"
+var system_db_user_group = "user_group"
+var system_db_user_account = "user_account"
 
 var system_db_latest = 5
 
@@ -108,7 +108,7 @@ var system_is_new = fn(ctx) {
         return null
     }
 
-    var r = db_select_all(db, _db_system_table)
+    var r = db_select_all(db, system_db_table)
     return r == null
 }
 
@@ -150,35 +150,35 @@ var system_init_db = fn(ctx) {
     }
 
     if (in(system_db_types_derby, dt)) {
-        var r = db_create_table_derby(db, _db_system_table, system_col)
-        var r = db_insert(db, _db_system_table, _db_system_val)
-        var r = db_create_table_derby(db, _db_system_user_group, 
+        var r = db_create_table_derby(db, system_db_table, system_col)
+        var r = db_insert(db, system_db_table, system_db_val)
+        var r = db_create_table_derby(db, system_db_user_group, 
             user_group_col)
-        var r = db_insert(db, _db_system_user_group, user_group_val)
+        var r = db_insert(db, system_db_user_group, user_group_val)
         var gid = db_last_derby(db)
         if (gid == null) {
             return null
         }
-        var r = db_create_table_derby(db, _db_system_user_account, 
+        var r = db_create_table_derby(db, system_db_user_account, 
             user_account_col)
         set(user_account_val, "user_account_group_id", gid)
-        var r = db_insert(db, _db_system_user_account, user_account_val)
+        var r = db_insert(db, system_db_user_account, user_account_val)
 
     }
     if (dt == system_db_types_pg) {
-        var r = db_create_table_postgresql(db, _db_system_table, system_col)
-        var r = db_insert(db, _db_system_table, _db_system_val)
+        var r = db_create_table_postgresql(db, system_db_table, system_col)
+        var r = db_insert(db, system_db_table, system_db_val)
         var r = db_create_table_postgresql(db, 
-            _db_system_user_group, user_group_col)
-        var r = db_insert(db, _db_system_user_group, user_group_val)
+            system_db_user_group, user_group_col)
+        var r = db_insert(db, system_db_user_group, user_group_val)
         var gid = db_last_postgresql(db)
         if (gid == null) {
             return null
         }
-        var r = db_create_table_postgresql(db, _db_system_user_account, 
+        var r = db_create_table_postgresql(db, system_db_user_account, 
             user_account_col)
         set(user_account_val, "user_account_group_id", gid)
-        var r = db_insert(db, _db_system_user_account, user_account_val)
+        var r = db_insert(db, system_db_user_account, user_account_val)
     }
     return true 
 }

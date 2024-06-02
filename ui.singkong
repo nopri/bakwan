@@ -8,7 +8,7 @@
     Budiman
 ;
 
-var _button_opt = {
+var ui_button_opt = {
     0: [-16750849, -1],
     1: [-16724992, -1],
     2: [-52429, -1],
@@ -19,7 +19,7 @@ var _button_opt = {
 
 var ui_c_btn_ = fn(a, t, m) {
     var b = component("button", a)
-    var c = _button_opt[t]
+    var c = ui_button_opt[t]
     if (c != null) {
         config(b, "background", c[0])
         config(b, "foreground", c[1])
@@ -34,7 +34,7 @@ var ui_c_btn = fn(a) {
 
 
 var ui_d_btn = fn(b, t) {
-    var c = _button_opt[t]
+    var c = ui_button_opt[t]
     if (c != null) {
         config(b, "background", c[0])
         config(b, "foreground", c[1])
@@ -108,4 +108,14 @@ var ui_c_enable_text = fn(c) {
     config(c, "enabled", true)
     config(c, "background", "white")
 }
+
+var ui_set_font_size = fn(comp, size) {
+    if ( (!is(comp, "COMPONENT")) | (!is(size, "NUMBER")) ) {
+        return false
+    }
+    var comp_font = get(comp, "font")
+    set(comp_font, 2, size)
+    return config(comp, "font", comp_font)
+}
+
 
