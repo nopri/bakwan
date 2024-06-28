@@ -1,18 +1,19 @@
 #
     product.singkong
     Products
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Budiman (budyzhang778@gmail.com)
-    Noprianto (nop@noprianto.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 var product_title = fn() {
     return _("title_product")
 }
 
-var product_privileges = fn(ctx) {
+var product_privileges = fn() {
     var p = system_privileges_template()
     set(p, _select, true)
     set(p, _insert, true)
@@ -21,7 +22,7 @@ var product_privileges = fn(ctx) {
     return p
 }
 
-var product_load_data = fn(ctx, c) {
+var product_load_data = fn(c) {
     var t = c[0]
     var n = c[1]
     config(t, "contents", [])
@@ -51,8 +52,8 @@ var product_load_data = fn(ctx, c) {
     enable_components(c)
 }
 
-var product_form = fn(ctx) {
-    var p = product_privileges(ctx)
+var product_form = fn() {
+    var p = product_privileges()
     var g = component("grid", product_title())
 
     var grid_product = component("grid", "product__main")
@@ -109,7 +110,7 @@ var product_form = fn(ctx) {
                     cmb_sort,
                     btn_view
                 ]
-                product_load_data(ctx, c)
+                product_load_data(c)
             },
             show_progress,
             show_progress_done,

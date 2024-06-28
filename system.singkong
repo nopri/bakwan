@@ -1,11 +1,12 @@
 #
     system.singkong
     System
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
-    Budiman (Budyzhang778@gmail.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 load_module("db_util")
@@ -41,7 +42,7 @@ var system_db_types_derby = [
 ]
 var system_db_types_pg = system_db_type_pg
 
-var system_delay = 100
+var system_auth_len = 4
 
 var system_get_string = fn(o) {
     if (o == null) {
@@ -50,7 +51,7 @@ var system_get_string = fn(o) {
     return string(o)
 }
 
-var system_connect_db = fn(ctx, dt, dh, du, dp, dn) {
+var system_connect_db = fn(dt, dh, du, dp, dn) {
     var n = ctx["name"]
     if (n == null) {
         return n
@@ -72,12 +73,12 @@ var system_connect_db = fn(ctx, dt, dh, du, dp, dn) {
     return null
 }
 
-var system_read_config = fn(ctx) {
+var system_read_config = fn() {
     return properties_read(ctx["conf_path"])
 }
 
-var system_get_db_info = fn(ctx, p) {
-    var conf = system_read_config(ctx)
+var system_get_db_info = fn(p) {
+    var conf = system_read_config()
     var ret = [
         _("label_db_type") + ": " + conf["db_type"],
         _("label_db_host") + ": " + conf["db_host"],
@@ -90,19 +91,19 @@ var system_get_db_info = fn(ctx, p) {
     return ret
 }
 
-var system_get_db = fn(ctx) {
-    var conf = system_read_config(ctx)
+var system_get_db = fn() {
+    var conf = system_read_config()
     var db_host = conf["db_host"]
     var db_user = conf["db_user"]
     var db_password = conf["db_password"]
     var db_name = conf["db_name"]
     var db_type = conf["db_type"]
-    return system_connect_db(ctx, 
+    return system_connect_db( 
         db_type, db_host, db_user, db_password,
         db_name)
 }
 
-var system_is_new = fn(ctx) {
+var system_is_new = fn() {
     var db = ctx["db"]
     if (db == null) {
         return null
@@ -112,7 +113,7 @@ var system_is_new = fn(ctx) {
     return r == null
 }
 
-var system_init_db = fn(ctx) {
+var system_init_db = fn() {
     var db = ctx["db"]
     if (db == null) {
         return null
@@ -183,7 +184,7 @@ var system_init_db = fn(ctx) {
     return true 
 }
 
-var system_db_get_version = fn(ctx) {
+var system_db_get_version = fn() {
     var db = ctx["db"]
     if (db == null) {
         return null
@@ -210,7 +211,7 @@ var system_db_get_version = fn(ctx) {
     return v
 }
 
-var system_db_set_version = fn(ctx, v) {
+var system_db_set_version = fn(v) {
     var db = ctx["db"]
     if (db == null) {
         return null
@@ -228,7 +229,7 @@ var system_db_set_version = fn(ctx, v) {
     return true
 }
 
-var system_upgrade_db = fn(ctx) {
+var system_upgrade_db = fn() {
     var db = ctx["db"]
     if (db == null) {
         return null
@@ -237,7 +238,7 @@ var system_upgrade_db = fn(ctx) {
 
     var res = []
     var r = repeat {
-        var v = system_db_get_version(ctx)
+        var v = system_db_get_version()
         if (v == system_db_latest) {
             return false
         }
@@ -362,7 +363,7 @@ var system_upgrade_db = fn(ctx) {
         }
 
         var cv = v + 1
-        var rv = system_db_set_version(ctx, cv)
+        var rv = system_db_set_version(cv)
         if (rv == null) {
             return null
         }
@@ -383,30 +384,38 @@ var system_upgrade_db = fn(ctx) {
     return false
 }
 
-var system_auth = fn(ctx, u, p) {
+var system_auth = fn(u, p) {
     var db = ctx["db"]
+    if (db == null) {
+        return null
+    }
     var r = db_query_single(db, 
         "select salt from user_account where name=?", 
-    [u])
-    if (r != null) {
-        var r = r[0]
-        if (len(r) == 1) {
-            var s = r[0][0]
-            var h = md5(p + s)
-            var rr = db_query_single(db, 
-                "select user_account_id, 
-                    user_account_group_id,
-                    name
-                from user_account
-                    where
-                name=? and password=?",
-                [u, h]
-            )
-            if (rr != null) {
-                var rr = rr[0]
-                if (len(rr) == 1) {
-                    return rr[0]
-                }
+        [u]
+    )
+    if (r == null) {
+        return null
+    }
+
+    var r = r[0]
+    if (len(r) == 1) {
+        var s = r[0][0]
+        var h = md5(p + s)
+        var rr = db_query_single(db, 
+            "select user_account_id, 
+                user_account_group_id,
+                name
+            from user_account
+                where
+            name=? and password=?",
+            [u, h]
+        )
+        if (rr != null) {
+            var rr = rr[0]
+            if (len(rr) == 1) {
+                var a = rr[0]
+                var b = {}
+                return [a[0], a[1], a[2], b]
             }
         }
     }

@@ -1,10 +1,12 @@
 #
     main.singkong
     main (runnable jar file)
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 load_file_or_resource("bakwan.singkong")

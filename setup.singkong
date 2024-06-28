@@ -1,10 +1,12 @@
 #
     setup.singkong
     Account setup
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 load_module("ui_calendar")
@@ -28,7 +30,7 @@ var setup_default_fiscal_end = fn() {
     ]
 }
 
-var setup_load_coa = fn(ctx, tbl) {
+var setup_load_coa = fn(tbl) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -54,7 +56,7 @@ var setup_load_coa = fn(ctx, tbl) {
     config(tbl, "contents", d)
 }
 
-var setup_is_coa_exists = fn(ctx, h) {
+var setup_is_coa_exists = fn(h) {
     var c = h["code"]
     if (c != null) {
         var r = db_query_single(db, 
@@ -73,14 +75,14 @@ var setup_is_coa_exists = fn(ctx, h) {
     return true
 }
 
-var setup_create_coa = fn(ctx, h) {
+var setup_create_coa = fn(h) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
         return null
     }
     
-    var t = setup_is_coa_exists(ctx, h)
+    var t = setup_is_coa_exists(h)
     if (t) {
         message(_("error_account_code_exists"), _("title_error"))
     } else {
@@ -90,7 +92,7 @@ var setup_create_coa = fn(ctx, h) {
     return null
 }
 
-var setup_delete_coa = fn(ctx, h) {
+var setup_delete_coa = fn(h) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -101,7 +103,7 @@ var setup_delete_coa = fn(ctx, h) {
     return r
 }
 
-var setup_update_coa = fn(ctx, h1, h2) {
+var setup_update_coa = fn(h1, h2) {
     var db = ctx["db"]
     if (db == null) {
         message(_("error_db_connect"), _("title_error"))
@@ -121,7 +123,7 @@ var setup_set_account_code = fn(cmb, msk) {
     }
 }
 
-var setup_account_dialog = fn(ctx, edit) {
+var setup_account_dialog = fn(edit) {
     var cmb_type = component("combobox", account_types_)
     ui_d_cmb_border(cmb_type, _u("_account_type"))
     var msk_code = component("mask", account_mask)
@@ -158,7 +160,7 @@ var setup_account_dialog = fn(ctx, edit) {
     return [g, cmb_type, msk_code, txt_desc]
 }
 
-var setup_form = fn(ctx) {
+var setup_form = fn() {
     var ret = {}
     var r = []
 
@@ -211,10 +213,10 @@ var setup_form = fn(ctx) {
     grid_add(g, btn_close, 1, 3, 1, 1, 1, 0, 0, 2)
     grid_add(g, btn_save, 2, 3, 1, 1, 1, 0, 0, 1)
 
-    setup_load_coa(ctx, tbl_coa)
+    setup_load_coa(tbl_coa)
 
     event(b_coa_n, fn() {
-        var d = setup_account_dialog(ctx, {})
+        var d = setup_account_dialog({})
         var r = panel_dialog(d[0], _("title_account_new"), 
             ctx["dialog_width"], ctx["dialog_height"])
         if (r == "OK") {
@@ -231,12 +233,12 @@ var setup_form = fn(ctx) {
                     "code": a[1],
                     "description": a[2]
                 }
-                if (setup_create_coa(ctx, h) == null) {
+                if (setup_create_coa(h) == null) {
                     message(_("error_account_create"), _("title_error"))
                 } else {
                     message(_("success_account_create"), _("title_info"))
                 }
-                setup_load_coa(ctx, tbl_coa)
+                setup_load_coa(tbl_coa)
             }
         }
     })
@@ -252,7 +254,7 @@ var setup_form = fn(ctx) {
             "_code": table_get_value(tbl_coa, a, 2),
             "_description": table_get_value(tbl_coa, a, 3)
         }
-        var d = setup_account_dialog(ctx, edit)
+        var d = setup_account_dialog(edit)
         var r = panel_dialog(d[0], _("title_account_edit"), 
             ctx["dialog_width"], ctx["dialog_height"])
         if (r == "OK") {
@@ -273,12 +275,12 @@ var setup_form = fn(ctx) {
                     "code": aa[1],
                     "description": aa[2]
                 }
-                if (setup_update_coa(ctx, h1, h2) == null) {
+                if (setup_update_coa(h1, h2) == null) {
                     message(_("error_account_update"), _("title_error"))
                 } else {
                     message(_("success_account_update"), _("title_info"))
                 }
-                setup_load_coa(ctx, tbl_coa)
+                setup_load_coa(tbl_coa)
                 config(tbl_coa, "active", a)
             }
         }
@@ -302,12 +304,12 @@ var setup_form = fn(ctx) {
             var h = [
                 ["account_coa_id = ", aid, ""]
             ]
-            if (setup_delete_coa(ctx, h) == null) {
+            if (setup_delete_coa(h) == null) {
                 message(_("error_account_delete"), _("title_error"))
             } else {
                 message(_("success_account_delete"), _("title_info"))
             }
-            setup_load_coa(ctx, tbl_coa)
+            setup_load_coa(tbl_coa)
         }
     })
 

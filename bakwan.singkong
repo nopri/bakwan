@@ -1,11 +1,11 @@
 #
     bakwan.singkong
-    
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
-    Budiman (Budyzhang778@gmail.com)
+    Bakwan
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+    https://github.com/nopri/bakwan
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 require(9.7)
@@ -78,6 +78,7 @@ var ctx = {
     "user_id": null,
     "group_id": null,
     "permission": null,
+    "user_data": {},
     
     "dialog_width": 400,
     "dialog_height": 240,
@@ -92,7 +93,7 @@ var ctx = {
     "tab": null
 }
 
-var app_menu = fn(ctx) { 
+var app_menu = fn() { 
     return [
         [_("menu_file"), _m("menu_file"), 
             [
@@ -101,7 +102,7 @@ var app_menu = fn(ctx) {
                     _m("menu_settings"), 
                     true,
                     fn() {
-                        var r = setup_form(ctx)
+                        var r = setup_form()
                     }  
                 ],
                 [],
@@ -122,7 +123,7 @@ var app_menu = fn(ctx) {
                     _m("menu_about"), 
                     true, 
                     fn() {
-                        var r = about_form(ctx)
+                        var r = about_form()
                     }
                 ]
             ]
@@ -130,7 +131,7 @@ var app_menu = fn(ctx) {
     ]
 }
 
-var init_ui = fn(ctx) {
+var init_ui = fn() {
     closing(_("confirm_quit"), _("title_confirm"))
 
     var status_db = ctx["db_type"]
@@ -143,18 +144,18 @@ var init_ui = fn(ctx) {
     set(ctx, "progress", component("progress", ""))
     config(ctx["progress"], "active", true)
 
-    menubar(app_menu(ctx))
+    menubar(app_menu())
 
     var tab_main = component("tab", "")
     set(ctx, "tab", tab_main)
 
-    tab_add(tab_main, dashboard_form(ctx))
+    tab_add(tab_main, dashboard_form())
 
-    if (contact_privileges(ctx)[_select]) {
-        tab_add(tab_main, contact_form(ctx))
+    if (contact_privileges()[_select]) {
+        tab_add(tab_main, contact_form())
     }
-    if (product_privileges(ctx)[_select]) {
-        tab_add(tab_main, product_form(ctx))
+    if (product_privileges()[_select]) {
+        tab_add(tab_main, product_form())
     }
     add(tab_main)
 }
@@ -192,12 +193,12 @@ var show_progress_done = fn(data) {
     enable_tab()
 }
 
-var conf = system_read_config(ctx)
+var conf = system_read_config()
 var conf_status = repeat {
     if (empty(conf)) {
-        var r = config_form(ctx)
+        var r = config_form()
         if (r["config"] == true | r["command"] == "close") {
-            var conf = system_read_config(ctx)
+            var conf = system_read_config()
             return r
         }
     } else {
@@ -208,9 +209,9 @@ var conf_status = repeat {
 if (empty(conf)) {
     frame_close()
 } else {
-    var db = system_get_db(ctx)
+    var db = system_get_db()
     if (db == null) {
-        var n = join(lf(), system_get_db_info(ctx, false))
+        var n = join(lf(), system_get_db_info(false))
         var m = _("error_db_connect") + lf() + n + lf() + _("confirm_config_reset")
         var r = confirm(m, _("title_confirm"))
         if (r == "OK") {
@@ -228,8 +229,8 @@ if (empty(conf)) {
         set(ctx, "db_name", conf["db_name"])
         set(ctx, "db_user", conf["db_user"])
 
-        if (system_is_new(ctx)) {
-            var r = system_init_db(ctx)
+        if (system_is_new()) {
+            var r = system_init_db()
             if (r == null) {
                 message(_("error_db_init"), _("title_error"))
                 frame_close()
@@ -246,7 +247,7 @@ if (empty(conf)) {
             }
         }
 
-        var r_upg = system_upgrade_db(ctx)
+        var r_upg = system_upgrade_db()
         if (r_upg == null) {
             message(_("error_db_upgrade"), _("title_error"))
             frame_close()
@@ -271,24 +272,32 @@ if (empty(conf)) {
             if (len(r) > 1) {
                 var u = r[0]
                 var p = r[1]
-                var r_auth = system_auth(ctx, u, p)
-                if (len(r_auth) == 3) {
-                    return r_auth
-                } else {
+                var r_auth = system_auth(u, p)
+                if (r_auth == null) {
                     message(
-                        _("error_auth"),
-                        _("title_info")
+                        _("error_db_connect"),
+                        _("title_error")
                     )
+                } else {
+                    if (len(r_auth) == system_auth_len) {
+                        return r_auth
+                    } else {
+                        message(
+                            _("error_auth"),
+                            _("title_info")
+                        )
+                    }
                 }
             } else {
                 return []
             }
         }
-        if (len(r_auth) == 3) {
+        if (len(r_auth) == system_auth_len) {
             set(ctx, "user_id", r_auth[0])
             set(ctx, "group_id", r_auth[1])
             set(ctx, "user", r_auth[2])
-            init_ui(ctx)
+            set(ctx, "user_data", r_auth[3])
+            init_ui()
         } else {
             frame_close()
         }

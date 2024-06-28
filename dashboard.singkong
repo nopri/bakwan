@@ -1,17 +1,19 @@
 #
     dashboard.singkong
     Dashboard
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 var dashboard_title = fn() {
     return _("title_dashboard")
 }
 
-var dashboard_privileges = fn(ctx) {
+var dashboard_privileges = fn() {
     var p = system_privileges_template()
     set(p, _select, true)
     set(p, _insert, true)
@@ -20,8 +22,8 @@ var dashboard_privileges = fn(ctx) {
     return p
 }
 
-var dashboard_form = fn(ctx) {
-    var p = dashboard_privileges(ctx)
+var dashboard_form = fn() {
+    var p = dashboard_privileges()
     var g = component("grid", dashboard_title())
     return g
 }

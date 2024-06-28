@@ -1,11 +1,12 @@
 #
     message.singkong
-    
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
-    Budiman (budyzhang778@gmail.com)
+    Messages
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 var message_msg = {

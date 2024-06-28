@@ -1,18 +1,19 @@
 #
     contact.singkong
     Contacts
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
-    Budiman (budyzhang778@gmail.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
 
 var contact_title = fn() {
     return _("title_contact")
 }
 
-var contact_privileges = fn(ctx) {
+var contact_privileges = fn() {
     var p = system_privileges_template()
     set(p, _select, true)
     set(p, _insert, true)
@@ -21,7 +22,7 @@ var contact_privileges = fn(ctx) {
     return p
 }
 
-var contact_load_data = fn(ctx, c) {
+var contact_load_data = fn(c) {
     var t = c[0]
     var n = c[1]
     config(t, "contents", [])
@@ -62,8 +63,8 @@ var contact_load_data = fn(ctx, c) {
     enable_components(c)
 }
 
-var contact_form = fn(ctx) {
-    var p = contact_privileges(ctx)
+var contact_form = fn() {
+    var p = contact_privileges()
     var g = component("grid", contact_title())
 
     var grid_contact = component("grid", "contact__main")
@@ -120,7 +121,7 @@ var contact_form = fn(ctx) {
                     cmb_sort,
                     btn_view
                 ]
-                contact_load_data(ctx, c)
+                contact_load_data(c)
             },
             show_progress,
             show_progress_done,

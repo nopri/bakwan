@@ -1,14 +1,13 @@
 #
     config.singkong
     Database configuration
-    part of Bakwan: simple accounting software
-    
-    Authors:
-    Noprianto (nop@noprianto.com)
-    Budiman (Budyzhang778@gmail.com)
+
+    Bakwan: simple accounting software
+    written in Singkong Programming Language
+
+    https://github.com/nopri/bakwan  
+    Started by: Noprianto <nop@noprianto.com>
 ;
-
-
 
 load_module("db_util")
 
@@ -37,17 +36,17 @@ var config_set_db_conn_param = fn(t, h, u, p, n) {
     return dt
 }
 
-var config_test_db_conn = fn(ctx, t, h, u, p, n) {
+var config_test_db_conn = fn(t, h, u, p, n) {
     var dt = trim(get(t, "text"))
     var dh = trim(get(h, "contents"))
     var du = trim(get(u, "contents"))
     var dp = get(p, "contents")
     var dn = trim(get(n, "contents"))
 
-    return system_connect_db(ctx, dt, dh, du, dp, dn)
+    return system_connect_db(dt, dh, du, dp, dn)
 }
 
-var config_form = fn(ctx) {
+var config_form = fn() {
     var ret = {}
     var r = []
 
@@ -99,7 +98,7 @@ var config_form = fn(ctx) {
     })
 
     event(btn_connect, fn() {
-        var db = config_test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = config_test_db_conn(cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else {
@@ -111,7 +110,7 @@ var config_form = fn(ctx) {
         set(ret, "command", "save")
         set(ret, "config", false) 
 
-        var db = config_test_db_conn(ctx, cmb_type, txt_host, txt_user, pas_db, txt_name)
+        var db = config_test_db_conn(cmb_type, txt_host, txt_user, pas_db, txt_name)
         if (db == null) {
             message(_("error_db_connect"), _("title_error"))
         } else{
