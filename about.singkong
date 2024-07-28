@@ -29,7 +29,7 @@ var about_get_authors = fn() {
     each(ctx["contributors"], fn(e, i) {
         var role = ""
         if (!empty(e[0])) {
-            var role = " [" + join(", ", e[0]) + "]"
+            var role = " [" + _("_pr") + " " + join(", ", e[0]) + "]"
         }
         var t = pad_b + e[1] + " (" + e[2] + ")" + role
         d + t

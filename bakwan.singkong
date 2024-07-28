@@ -8,7 +8,7 @@
     Started by: Noprianto <nop@noprianto.com>
 ;
 
-require(9.7)
+require(9.8)
 load_module("ui_util")
 
 load_file_or_resource("account.singkong")
@@ -63,7 +63,11 @@ var ctx = {
         [[], "Noprianto", "nop@noprianto.com"]
     ],
     "contributors": [
-        [["pre-release"], "Budiman", "Budyzhang778@gmail.com"]
+        [
+            [1, 7, 8, 13, 14, 17, 18], 
+            "Budiman", 
+            "Budyzhang778@gmail.com"
+        ]
     ],
 
     "conf_path": userhome() + separator() + app_conf,
@@ -230,7 +234,9 @@ if (empty(conf)) {
         set(ctx, "db_user", conf["db_user"])
 
         if (system_is_new()) {
+            var px = popup_show_progress() 
             var r = system_init_db()
+            popup_hide(px)
             if (r == null) {
                 message(_("error_db_init"), _("title_error"))
                 frame_close()
@@ -247,7 +253,9 @@ if (empty(conf)) {
             }
         }
 
+        var px = popup_show_progress() 
         var r_upg = system_upgrade_db()
+        popup_hide(px)
         if (r_upg == null) {
             message(_("error_db_upgrade"), _("title_error"))
             frame_close()
@@ -272,7 +280,9 @@ if (empty(conf)) {
             if (len(r) > 1) {
                 var u = r[0]
                 var p = r[1]
+                var px = popup_show_progress() 
                 var r_auth = system_auth(u, p)
+                popup_hide(px)
                 if (r_auth == null) {
                     message(
                         _("error_db_connect"),
